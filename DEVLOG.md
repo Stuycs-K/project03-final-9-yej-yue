@@ -2,8 +2,9 @@
 
 ## Ellen Yu
 
-### 2024-01-03 - Brief description
-Expanded description including how much time was spent on task.
+### 2024-01-03 - proposal, branch
+- timeline in proposal: 10 minutes
+- branch creation: 2 minutes
 
 ## Jennifer Ye
 

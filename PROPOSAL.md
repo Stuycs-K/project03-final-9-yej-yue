@@ -46,7 +46,9 @@ Our music streaming server will allow clients to access, request, and control mu
 # Intended pacing:
 
 Jan 3 - proposal 
-
+Jan 5 - implementing file handling to be able to play songs
+Jan 8 - signals and new functions for users (ex: playing song, skipping song, playlists)
+Jan 10 - adding client/server connections
+Jan 12/15 - allowing multiple clients to use 
+Jan 15 - polishing
 Jan 16 - due
-
-A timeline with expected completion dates of parts of the project.
