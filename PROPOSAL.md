@@ -2,7 +2,8 @@
 
 ## Group Members:
 
-names here.
+Ellen Yu
+Jennifer Ye
        
 # Intentions:
 
@@ -26,4 +27,6 @@ What algorithms and /or data structures you will be using, and how.
     
 # Intended pacing:
 
+Jan 3 - proposal 
+Jan 16 - due
 A timeline with expected completion dates of parts of the project.
