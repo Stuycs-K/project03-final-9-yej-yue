@@ -3,8 +3,7 @@
 
 ### jellen
 
-Ellen Yu
-Jennifer Ye
+Ellen Yu, Jennifer Ye
        
 ### Project Description:
 
