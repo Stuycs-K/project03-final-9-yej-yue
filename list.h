@@ -2,9 +2,17 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+
 #ifndef LIST_H
 #define LIST_H
-struct node {char name[100]; char artist[100]; struct node *next;};
+
+struct node {
+    char name[100]; 
+    char artist[100]; 
+    char filePath[256];
+    struct node *next;
+};
+
 void printsong(struct node* t);
 struct node* makesong(char* song, char* singer, struct node* n);
 int compare_artist(struct node* one, struct node* two);
@@ -17,4 +25,5 @@ struct node* find_song(char* singa, char*song, struct node* t);
 struct node* rand_song(struct node* t);
 struct node * free_list(struct node *);
 struct node * remove_node_by_index(struct node *front, int index);
+
 #endif
