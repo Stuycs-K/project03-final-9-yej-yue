@@ -4,3 +4,9 @@ void err(int i, char* message) {
         exit(1);
     }
 }
+
+void initializeSDL() {
+    if (SDL_Init(SDL_INIT_AUDIO) < 0) {
+        err(errno, "SDL could not be initialized");
+    }
+}
