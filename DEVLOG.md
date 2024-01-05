@@ -17,3 +17,6 @@
 
 ### 2024-01-04 - library
 - search for music api/library: 30 minutes
+- audio playback SDL library download: 5 minutes
+- audio code files: 5 minutes
+- song playback functions brainstorming in .h: 15 minutes
