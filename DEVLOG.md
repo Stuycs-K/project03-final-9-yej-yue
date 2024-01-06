@@ -9,6 +9,9 @@
 - setting up lib, list, makefile: 10 min
 - helping search how to play music: 20 min
 - adding server and client files for networking: 10 min
+### 2024-01-05 - setting up music library
+- searched for how to properly include external library: 35 min
+- changed makefile: 5 min
 
 ## Jennifer Ye
 
