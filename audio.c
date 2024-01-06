@@ -11,7 +11,7 @@ void initializeSDL() {
     }
 }
 
-void play_song(struct node* song) {
+void playSong(struct node* song) {
     SDL_AudioSpec wavSpec;
     Uint32 wavLength;
     Uint8* wavBuffer;
