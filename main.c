@@ -23,7 +23,7 @@ static void sighandler(int signo) {
     if (signo == SIGCONT){//ctrl q
         //play
     }
-    if (signo == SIGSTOP){
+    if (signo == SIGSTOP){//ctrl s
         //play from beginning/rewind
     }
 }
@@ -35,7 +35,7 @@ int main() {
     signal(SIGSTOP, sighandler);
     while (1){
         char in[32];
-        printf("press 'm' to make a playlist, 'a' to add a song, 'd' to delete song, 's' to shuffle play\n");
+        printf("press 'm' to make a playlist, 'a' to add a song, 'd' to delete song, 's' to shuffle play, 'ctrl+c' to exit\n");
         fgets(in, sizeof(in), stdin);
         if (strcmp(in, "m")==0){
             struct node** playlist = makelib();
@@ -44,7 +44,20 @@ int main() {
             fgets(num, sizeof(num),stdin);
             int numsongs = atoi(num);
             for (int i = 0; i < numsongs; i++){
+                //addsong to playlist
             }
+        }
+        else if (strcmp(in, "a")==0){
+            //addsong to playlist
+        }
+        else if (strcmp(in, "d")==0){
+            //remove song
+        }
+        else if (strcmp(in, "s")==0){
+            //shuffle
+        }
+        else {
+            printf("try again\n");
         }
     }
 }
