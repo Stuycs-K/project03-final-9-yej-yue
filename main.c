@@ -21,4 +21,20 @@ static void sighandler(int signo) {
 int main() {
     signal(SIGINT, sighandler);
     signal(SIGSTOP, sighandler);
+    while (1){
+        char in[32];
+        printf("press 'm' to make a playlist, 'a' to add a song, 'd' to delete song, 's' to shuffle play\n");
+        fgets(in, sizeof(in), stdin);
+        if (strcmp(in, "m")==0){
+            struct node** playlist = makelib();
+            char num[8];
+            printf("how many songs would you like to add? (in numbers) \n");
+            fgets(num, sizeof(num),stdin);
+            int numsongs = atoi(num);
+            for (int i = 0; i < numsongs; i++){
+                
+            }
+        }
+        //if m, ask how many songs to add then later they can adjust by adding or deleting
+    }
 }
