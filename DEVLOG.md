@@ -17,7 +17,8 @@
 - tried to accurately include sdl (unsuccessful): 30 min
 - adding signals and main setup: 15 min
 ### 2024-01-08 - setting up music library
-
+- adding signals and adding to main: 25 min
+- creating err: 5 min
 
 ## Jennifer Ye
 
