@@ -24,3 +24,6 @@
 - audio playback SDL library download: 5 minutes
 - audio code files: 5 minutes
 - song playback functions brainstorming in .h: 15 minutes
+
+### 2024-01-05 - library
+- three song playback functions (err, initializeSDL, playSong): 40 minutes
