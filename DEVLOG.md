@@ -19,6 +19,7 @@
 ### 2024-01-08 - setting up music library
 - adding signals and adding to main: 25 min
 - creating err: 5 min
+- fixing compiling and editing makefile: 40 min
 
 ## Jennifer Ye
 
