@@ -1,5 +1,6 @@
 #include "connect.h"
 #include "lib.h"
+#include "list.h"
 
 void subserver_logic(int client_socket, struct node** lib) {
     char input[BUFFER_SIZE];

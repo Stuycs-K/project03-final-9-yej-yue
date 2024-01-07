@@ -1,4 +1,6 @@
 #include "connect.h"
+#include "lib.h"
+#include "list.h"
 
 void clientLogic(int server_socket) {
     char input[BUFFER_SIZE];
