@@ -12,6 +12,11 @@
 ### 2024-01-05 - setting up music library
 - searched for how to properly include external library: 35 min
 - changed makefile: 5 min
+### 2024-01-06 to -07 - setting up music library
+- researched more on sdl library includes: 60 min
+- tried to accurately include sdl (unsuccessful): 30 min
+- adding signals and main setup: 15 min
+
 
 ## Jennifer Ye
 
