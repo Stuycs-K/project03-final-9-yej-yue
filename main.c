@@ -18,13 +18,21 @@ static void sighandler(int signo) {
         //pause?
     }
     if (signo == SIGQUIT){//ctrl '\'
+        //skip
+    }
+    if (signo == SIGCONT){//ctrl q
         //play
+    }
+    if (signo == SIGSTOP){
+        //play from beginning/rewind
     }
 }
 int main() {
     signal(SIGINT, sighandler);
     signal(SIGQUIT, sighandler);
     signal(SIGTSTP, sighandler);
+    signal(SIGCONT, sighandler);
+    signal(SIGSTOP, sighandler);
     while (1){
         char in[32];
         printf("press 'm' to make a playlist, 'a' to add a song, 'd' to delete song, 's' to shuffle play\n");
