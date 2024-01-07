@@ -16,6 +16,7 @@
 - researched more on sdl library includes: 60 min
 - tried to accurately include sdl (unsuccessful): 30 min
 - adding signals and main setup: 15 min
+### 2024-01-08 - setting up music library
 
 
 ## Jennifer Ye

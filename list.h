@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include "err.h"
 
 #ifndef LIST_H
 #define LIST_H
