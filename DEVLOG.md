@@ -27,3 +27,8 @@
 
 ### 2024-01-05 - library
 - three song playback functions (err, initializeSDL, playSong): 40 minutes
+
+### 2024-01-07 - server, client
+- watched tutorials on SDL library: 60 minutes
+- client now sends song name and artist name: 30 minutes
+- server now receives song and artist name from client and adds it to library: 30 minutes
