@@ -1,7 +1,8 @@
 {
     "files.associations": {
         "networking.h": "c",
-        "connect.h": "c"
+        "connect.h": "c",
+        "audio.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
