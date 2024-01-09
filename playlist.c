@@ -47,3 +47,18 @@ void deletePlaylist(char* playlistName, struct node** playlist) {
         err(errno, "playlist not found \n");
     }
 }
+
+void alphabetizePlaylists(char* playlistName, struct node** playlist, struct node** library) {
+    struct node** target = findPlaylist(playlistName, playlist);
+    if (targetPlaylist != NULL) {
+        struct node* temp = *target;
+        while (temp != NULL) {
+            add_song(temp, library);
+            temp = temp-> next;
+        }
+        *target = free_list(*target);
+    } 
+    else {
+        err(errno, "playlist not found \n");
+    }
+}
