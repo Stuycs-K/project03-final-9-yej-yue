@@ -26,3 +26,14 @@ void addSong2Playlist(struct node* song, char* playlistName, struct node** playl
         err(errno, "playlist not found \n");
     }
 }
+
+void printPlaylist(char* playlistName, struct node** playlist) {
+    struct node** target = findPlaylist(playlistName, playlist);
+    if (target != NULL) {
+        printf("playlist: %s \n", playlistName);
+        print_list(*target);
+    } 
+    else {
+        err(errno, "playlist not found \n");
+    }
+}
