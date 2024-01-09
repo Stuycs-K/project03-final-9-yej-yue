@@ -9,17 +9,22 @@
 - setting up lib, list, makefile: 10 min
 - helping search how to play music: 20 min
 - adding server and client files for networking: 10 min
-### 2024-01-05 - setting up music library
+### 2024-01-05 - setting up music library and sdl
 - searched for how to properly include external library: 35 min
 - changed makefile: 5 min
-### 2024-01-06 to -07 - setting up music library
+### 2024-01-06 to -07 - setting up music library and sdl
 - researched more on sdl library includes: 60 min
 - tried to accurately include sdl (unsuccessful): 30 min
 - adding signals and main setup: 15 min
-### 2024-01-08 - setting up music library
+### 2024-01-08 - troubleshooting
 - adding signals and adding to main: 25 min
 - creating err: 5 min
 - fixing compiling and editing makefile: 40 min
+### 2024-01-09 - troubleshooting and server/client 
+- actually fixing makefile and compiling issues: 50 min 
+- working on server/client connection and exchanging information between them: 60 min
+
+
 
 ## Jennifer Ye
 

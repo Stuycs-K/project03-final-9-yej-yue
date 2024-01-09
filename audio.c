@@ -12,7 +12,7 @@ void play(struct node* song) {
     }
 }
 
-void pause() {
+void ppause() {
     if (system("pkill -STOP mpg123") == -1) {
         err(errno, "error pausing the song \n");
     }
@@ -23,11 +23,11 @@ void skip(struct node* nextSong) {
     if (system("pkill -KILL mpg123") == -1) {
         err(errno, "error skipping the song \n");
     }
-    playSong(nextSong);
+    play(nextSong);
     printf("song skipped \n");
 }
 
-void rewind(struct node* song) {
+void rrewind(struct node* song) {
     if (system("pkill -KILL mpg123") == -1) {
         err(errno, "error rewinding the song \n");
     }
