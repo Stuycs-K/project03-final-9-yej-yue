@@ -16,3 +16,13 @@ struct node** findPlaylist(char* playlistName, struct node** playlist) {
     }
     return NULL;
 }
+
+void addSong2Playlist(struct node* song, char* playlistName, struct node** playlist) {
+    struct node** target = findPlaylist(playlistName, playlist);
+    if (target != NULL) {
+        *target = insert_front(*target, song-> name, song-> artist);
+    } 
+    else {
+        err(errno, "playlist not found \n");
+    }
+}
