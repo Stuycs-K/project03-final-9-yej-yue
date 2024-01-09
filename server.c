@@ -7,15 +7,15 @@ void subserver_logic(int client_socket, struct node** lib) {
     read(client_socket, input, sizeof(input));
 
     if (strncmp(input, "ADD", 3) == 0) {
-        char* song = strtok(input + 4, ",");
+        char* song = strtok(input + 4, ",");//change to strsep
         char* artist = strtok(NULL, "\n");
 
         add_song(makesong(song, artist, NULL), lib);
 
-        snprintf(input, sizeof(input), "song added: %s, %s", song, artist);
+        printf("song added: %s, %s", song, artist);
     } 
     else {
-        snprintf(input, sizeof(input), "invalid command");
+        printf("invalid command");
     }
 
     write(client_socket, input, sizeof(input));
