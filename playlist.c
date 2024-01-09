@@ -37,3 +37,13 @@ void printPlaylist(char* playlistName, struct node** playlist) {
         err(errno, "playlist not found \n");
     }
 }
+
+void deletePlaylist(char* playlistName, struct node** playlist) {
+    struct node** target = findPlaylist(playlistName, playlist);
+    if (target != NULL) {
+        *target = free_list(*target);
+    } 
+    else {
+        err(errno, "playlist not found \n");
+    }
+}
