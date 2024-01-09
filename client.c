@@ -27,6 +27,7 @@ void clientLogic(int server_socket) {
     char input[BUFFER_SIZE];
     char song[BUFFER_SIZE];
     char artist[BUFFER_SIZE];
+    char playlist[BUFFER_SIZE];
     char out[32];
     printf("enter letter:\n");
     fgets(out, sizeof(out), stdin);
@@ -46,13 +47,16 @@ void clientLogic(int server_socket) {
         read(server_socket, input, sizeof(input));
         printf("modified: %s \n", input);
     }
-    else if (strncmp(in, "v", 1)==0){
-        printf("viewing playlist:\n");
+    else if (strncmp(out, "v", 1)==0){
+        printf("enter playlist name:\n");
+        fgets(playlist, sizeof(playlist), stdin);
+        printf("VIEWING %s\n", playlist);
+        write(server_setup, playlist, sizeof(playlist));
     }
-    else if (strncmp(in, "d", 1)==0){
+    else if (strncmp(out, "d", 1)==0){
         
     }
-    else if (strncmp(in, "s", 1)==0){
+    else if (strncmp(out, "m", 1)==0){
         
     }
 }

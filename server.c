@@ -39,9 +39,11 @@ void subserver_logic(int client_socket, struct node** lib) {
 
         printf("song added: %s, %s\n", song, artist);
     } 
-    // else if(){//view
-    //     //pipe it over
-    // }
+    else if(strncmp(input, "VIEW", 4)==0){//view
+        char* playlist = strtok(input+8, "\n");//connect playlist name w libs
+        printf("%s\n", playlist);
+        print_lib(lib);
+    }
     else {
         printf("invalid command");
     }
@@ -57,10 +59,12 @@ int main(int argc, char* argv[]) {
     signal(SIGSTOP, sighandler);
     int listen_socket = server_setup();
     struct node** lib = makelib();
-
+    // struct node*** wholelib = &lib;
+    
     while (1) {
         int client_socket = server_tcp_handshake(listen_socket);
-        printf("press 'v' to view the playlist, 'a' to add a song, 'd' to delete song, 's' to shuffle play, 'ctrl+c' to exit\n");
+        printf("\nKEYBOARD COMMANDS: 'ctrl+c' to exit, 'ctrl+q' to play, 'ctrl+z' to pause, 'ctrl+s' to rewind, 'ctrl+\\' to skip\n \n");
+        printf("press 'm' to make a playlist, 'v' to view a specific playlist, 'vlib' to view library, 'a' to add a song, 'd' to delete song\n");
         char in[32];
         read(client_socket, in, sizeof(in));
         if (fork() == 0) {
@@ -70,14 +74,18 @@ int main(int argc, char* argv[]) {
                 exit(0);
             }
             else if (strncmp(in, "v", 1)==0){
+                printf("printing playlist ");
                 subserver_logic(client_socket, lib);
                 exit(0);
             }
             else if (strncmp(in, "d", 1)==0){
                 
             }
-            else if (strncmp(in, "s", 1)==0){
+            else if (strncmp(in, "m", 1)==0){
                 
+            }
+            else if (strncmp(in, "vlib", 4)==0){
+
             }
         } 
         else {
