@@ -1,13 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <errno.h>
 #include "list.h"
 #include "lib.h"
 #include "connect.h"
 #include "audio.h"
-
+#include "playlist.h"
+#include "err.h"
 
 static void sighandler(int signo) {
     if (signo == SIGINT){//ctrl c

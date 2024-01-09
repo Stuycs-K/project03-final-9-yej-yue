@@ -6,11 +6,11 @@
 #include <string.h>
 // #include <SDL3/SDL.h>
 
-
 #ifndef AUDIO_H
 #define AUDIO_H
 
 void initializeSDL();
 void playSong(struct node* song);
+void pauseSong();
 
 #endif

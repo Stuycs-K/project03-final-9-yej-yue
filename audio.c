@@ -29,3 +29,7 @@ void playSong(struct node* song) {
     SDL_CloseAudioDevice(deviceId);
     SDL_FreeWAV(wavBuffer);
 }
+
+void pauseSong() {
+    SDL_PauseAudio(0);
+}
