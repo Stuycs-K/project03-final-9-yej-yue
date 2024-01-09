@@ -40,3 +40,12 @@
 - watched tutorials on SDL library: 60 minutes
 - client now sends song name and artist name: 30 minutes
 - server now receives song and artist name from client and adds it to library: 30 minutes
+
+### 2024-01-08 - playlist
+- playlist.h file completed with the six new functions: 20 minutes
+- users can now create playlists as a struct node**: 15 minutes
+- users can now search for a playlist: 10 minutes
+- users can now add songs to a specified playlist: 15 minutes
+- playlists can now be printed out with all of its contents: 10 minutes
+- playlists can now be deleted: 10 minutes
+- playlists can now be alphabetized: 15 minutes
