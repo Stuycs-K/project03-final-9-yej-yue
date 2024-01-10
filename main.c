@@ -5,6 +5,8 @@
 #include "playlist.h"
 #include "err.h"
 
+struct node* currSong;
+
 static void sighandler(int signo) {
     if (signo == SIGINT){//ctrl c
         printf("exiting music player\n");
@@ -14,10 +16,10 @@ static void sighandler(int signo) {
         //pause?
     }
     if (signo == SIGQUIT){//ctrl '\'
-        //skip
+        skipSong();
     }
     if (signo == SIGCONT){//ctrl q
-        //play
+        playSong(currSong);
     }
     if (signo == SIGSTOP){//ctrl s
         //play from beginning/rewind

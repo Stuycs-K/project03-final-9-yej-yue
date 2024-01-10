@@ -12,9 +12,17 @@ void playSong(struct node* song) {
     }
 }
 
+void pauseSong() {
+    if (system("pkill -STOP mpg123") == -1) {
+        err(errno, "error pausing the song \n");
+    }
+    printf("song paused \n");
+}
+
 void skipSong(struct node* nextSong) {
     if (system("pkill -KILL mpg123") == -1) {
         err(errno, "error pausing the song \n");
     }
     playSong(nextSong);
+    printf("song skipped \n");
 }

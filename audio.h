@@ -9,6 +9,7 @@
 #define AUDIO_H
 
 void playSong(struct node* song);
+void pauseSong();
 void skipSong(struct node* nextSong);
 
 #endif
