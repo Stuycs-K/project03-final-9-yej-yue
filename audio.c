@@ -11,3 +11,10 @@ void playSong(struct node* song) {
         err(errno, "error playing the song \n");
     }
 }
+
+void skipSong(struct node* nextSong) {
+    if (system("pkill -KILL mpg123") == -1) {
+        err(errno, "error pausing the song \n");
+    }
+    playSong(nextSong);
+}
