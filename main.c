@@ -6,6 +6,7 @@
 #include "err.h"
 
 struct node* currSong;
+struct node* nextSong;
 
 static void sighandler(int signo) {
     if (signo == SIGINT){//ctrl c
@@ -13,16 +14,16 @@ static void sighandler(int signo) {
         exit(0);
     }
     if (signo == SIGTSTP){//ctrl z
-        //pause?
+        pause();
     }
     if (signo == SIGQUIT){//ctrl '\'
-        skipSong();
+        skip(nextSong);
     }
     if (signo == SIGCONT){//ctrl q
-        playSong(currSong);
+        play(currSong);
     }
     if (signo == SIGSTOP){//ctrl s
-        //play from beginning/rewind
+        rewind(currSong);
     }
 }
 int main() {

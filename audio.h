@@ -8,8 +8,9 @@
 #ifndef AUDIO_H
 #define AUDIO_H
 
-void playSong(struct node* song);
-void pauseSong();
-void skipSong(struct node* nextSong);
+void play(struct node* song);
+void pause();
+void skip(struct node* nextSong);
+void rewind(struct node* song);
 
 #endif

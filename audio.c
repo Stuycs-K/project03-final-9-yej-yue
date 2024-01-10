@@ -1,7 +1,7 @@
 #include "list.h"
 #include "audio.h"
 
-void playSong(struct node* song) {
+void play(struct node* song) {
     char command[256];
     strcpy(command, "mpg123 \"");
     strcat(command, song-> name);
@@ -12,17 +12,25 @@ void playSong(struct node* song) {
     }
 }
 
-void pauseSong() {
+void pause() {
     if (system("pkill -STOP mpg123") == -1) {
         err(errno, "error pausing the song \n");
     }
     printf("song paused \n");
 }
 
-void skipSong(struct node* nextSong) {
+void skip(struct node* nextSong) {
     if (system("pkill -KILL mpg123") == -1) {
-        err(errno, "error pausing the song \n");
+        err(errno, "error skipping the song \n");
     }
     playSong(nextSong);
     printf("song skipped \n");
+}
+
+void rewind(struct node* song) {
+    if (system("pkill -KILL mpg123") == -1) {
+        err(errno, "error rewinding the song \n");
+    }
+    play(song);
+    printf("song rewound \n");
 }
