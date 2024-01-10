@@ -1,31 +1,36 @@
+#include "list.h"
 #include "audio.h"
 
-void initializeSDL() {
-    if (SDL_Init(SDL_INIT_AUDIO) < 0) {
-        err(errno, "SDL could not be initialized \n");
+void play(struct node* song) {
+    char command[256];
+    strcpy(command, "mpg123 \"");
+    strcat(command, song-> name);
+    strcat(command, "\"");
+    
+    if (system(command) == -1) {
+        err(errno, "error playing the song \n");
     }
 }
 
-void playSong(struct node* song) {
-    SDL_AudioSpec wavSpec;
-    Uint32 wavLength;
-    Uint8* wavBuffer;
-
-    if (SDL_LoadWAV(s-> file_path, &wavSpec, &wavBuffer, &wavLength) == NULL) {
-        err(errno, "SDL_LoadWAV failure \n")
+void pause() {
+    if (system("pkill -STOP mpg123") == -1) {
+        err(errno, "error pausing the song \n");
     }
+    printf("song paused \n");
+}
 
-    SDL_AudioDeviceID deviceId = SDL_OpenAudioDevice(NULL, 0, &wavSpec, NULL, 0);
-    if (deviceId == 0) {
-        err(errno, "SDL_OpenAudioDevice failure \n");
-        SDL_FreeWAV(wavBuffer);
+void skip(struct node* nextSong) {
+    if (system("pkill -KILL mpg123") == -1) {
+        err(errno, "error skipping the song \n");
     }
+    playSong(nextSong);
+    printf("song skipped \n");
+}
 
-    SDL_QueueAudio(deviceId, wavBuffer, wavLength);
-    SDL_PauseAudioDevice(deviceId, 0);
-
-    SDL_Delay(wavLength / (wavSpec.freq * wavSpec.channels * wavSpec.format));
-
-    SDL_CloseAudioDevice(deviceId);
-    SDL_FreeWAV(wavBuffer);
+void rewind(struct node* song) {
+    if (system("pkill -KILL mpg123") == -1) {
+        err(errno, "error rewinding the song \n");
+    }
+    play(song);
+    printf("song rewound \n");
 }

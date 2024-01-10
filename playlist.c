@@ -50,7 +50,7 @@ void deletePlaylist(char* playlistName, struct node** playlist) {
 
 void alphabetizePlaylists(char* playlistName, struct node** playlist, struct node** library) {
     struct node** target = findPlaylist(playlistName, playlist);
-    if (targetPlaylist != NULL) {
+    if (target != NULL) {
         struct node* temp = *target;
         while (temp != NULL) {
             add_song(temp, library);

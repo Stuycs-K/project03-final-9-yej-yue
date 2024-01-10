@@ -10,7 +10,6 @@
 struct node {
     char name[100]; 
     char artist[100]; 
-    char filePath[256];
     struct node *next;
 };
 
