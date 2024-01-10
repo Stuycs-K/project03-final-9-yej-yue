@@ -49,3 +49,12 @@
 - playlists can now be printed out with all of its contents: 10 minutes
 - playlists can now be deleted: 10 minutes
 - playlists can now be alphabetized: 15 minutes
+
+### 2024-01-09 - audio
+- pauseSong function using SDL: 10 minutes
+- research on homebrew's mpg123: 30 minutes
+- audio.h file completed with the four new functions: 15 minutes
+- users can now play songs using mpg123 with the song name: 20 minutes
+- users can now pause songs: 10 minutes
+- users can now skip songs: 10 minutes
+- users can now rewind songs: 15 minutes
