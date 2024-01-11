@@ -21,10 +21,10 @@ void print_lib(struct node** lib){
         }
         a++;
     }
-    if (a = 'a'+26){
+    if (a == 'a' + 26) {
         printf("songs by artist starting with symbols:\n");
-        if(*(lib+a-97) != NULL){
-            print_list(*(lib+a-97));
+        if (*(lib + a - 97) != NULL) {
+            print_list(*(lib + a - 97));
             printf("\n");
         }
     }

@@ -45,19 +45,24 @@ void subserver_logic(int client_socket, struct node** lib, int i) {
         printf("%s\n", playlist);
         print_lib(lib);
     }
-    else if (i ==3){
+    else if (i == 3) {
         struct node** playlist = makelib();
         printf("asking for playlist info \n");
-        printf("%s\n", input);
-        playlist -> name = strtok(input, "\n");
-        char* num = strtok(input+strlen(playlist->name), "\n");
+        char* playlistName = strtok(input, ",");
+        playlistName = strtok(NULL, "\n");
+        printf("%s\n", playlistName);
+
+        *playlist = (struct node*)malloc(sizeof(struct node));
+        (*playlist)->name = malloc(strlen(playlistName) + 1);
+        strcpy((*playlist)->name, playlistName);
+
+        char* num = strtok(NULL, "\n");
         int songnum = atoi(num);
-        for (int k = 0; k<songnum; k++){
-            char* song = strtok(input+strlen(playlist->name)+strlen(num)+4, ",");//change to strsep
+        for (int k = 0; k < songnum; k++) {
+            char* song = strtok(NULL, ",");
             char* artist = strtok(NULL, "\n");
             add_song(makesong(song, artist, NULL), playlist);
         }
-
     }
     else if (i==4){//view lib
         // int stdoutcopy = dup(STDOUT_FILENO);
