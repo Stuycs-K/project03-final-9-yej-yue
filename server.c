@@ -43,26 +43,35 @@ void subserver_logic(int client_socket, struct node** lib, int i) {
     else if(i==1){//view
         char* playlist = strtok(input+8, "\n");//connect playlist name w libs
         printf("%s\n", playlist);
-        print_lib(lib);
+        print_list(playlist);//except playlist name
     }
     else if (i == 3) {
-        struct node** playlist = makelib();
         printf("asking for playlist info \n");
-        char* playlistName = strtok(input, ",");
-        playlistName = strtok(NULL, "\n");
-        printf("%s\n", playlistName);
+        char* playlistName = strtok(input, "\n");
+        // printf("%s\n", playlistName);
 
-        *playlist = (struct node*)malloc(sizeof(struct node));
-        (*playlist)->name = malloc(strlen(playlistName) + 1);
-        strcpy((*playlist)->name, playlistName);
+        // *playlist = (struct node*)malloc(sizeof(struct node));
+        // (*playlist)->name = malloc(strlen(playlistName) + 1);
+        // strcpy((*playlist)->name, playlistName);//but *playlist->name is name of song in playlist
+        // printf("%s\n", (*playlist)->name);
 
-        char* num = strtok(NULL, "\n");
+        char* num = strtok(input+strlen(playlistName)+1, "\n");
+        // printf("%s\n",num);
         int songnum = atoi(num);
+        char* song[songnum];
+        char* artist[songnum];
         for (int k = 0; k < songnum; k++) {
-            char* song = strtok(NULL, ",");
-            char* artist = strtok(NULL, "\n");
-            add_song(makesong(song, artist, NULL), playlist);
+            song[k] = strtok(NULL, ", ");
+            printf("song %s\n", song[k]);
+            artist[k] = strtok(NULL, "\n");
+            printf("artist %s\n", artist[k]);
+            // add_song(makesong(song[k], artist[k], NULL), playlist);
         }
+        struct node* playlist = makesong(song[0], artist[0], NULL);
+        for (int k = 1; k<songnum; k++){
+            playlist = insert_in_order(makesong(song[k], artist[k], NULL), playlist);
+        }
+        print_list(playlist);
     }
     else if (i==4){//view lib
         // int stdoutcopy = dup(STDOUT_FILENO);
@@ -75,7 +84,7 @@ void subserver_logic(int client_socket, struct node** lib, int i) {
         printf("invalid command");
     }
 
-    write(client_socket, input, sizeof(input));
+    // write(client_socket, input, sizeof(input));
 }
 
 int main(int argc, char* argv[]) {

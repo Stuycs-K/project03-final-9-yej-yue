@@ -8,7 +8,7 @@
 #define LIST_H
 
 struct node {
-    char name; 
+    char name[100]; 
     char artist[100]; 
     struct node *next;
 };
