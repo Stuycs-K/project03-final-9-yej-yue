@@ -43,7 +43,8 @@ void subserver_logic(int client_socket, struct node** lib, int i) {
     else if(i==1){//view
         char* playlist = strtok(input+8, "\n");//connect playlist name w libs
         printf("%s\n", playlist);
-        print_list(playlist);//except playlist name
+        //print_list();//except something with lib
+
     }
     else if (i == 3) {
         printf("asking for playlist info \n");
@@ -68,10 +69,12 @@ void subserver_logic(int client_socket, struct node** lib, int i) {
             // add_song(makesong(song[k], artist[k], NULL), playlist);
         }
         struct node* playlist = makesong(song[0], artist[0], NULL);
+        add_song(makesong(song[0], artist[0], NULL), lib);
         for (int k = 1; k<songnum; k++){
             playlist = insert_in_order(makesong(song[k], artist[k], NULL), playlist);
+            add_song(makesong(song[k], artist[k], NULL), lib);
         }
-        print_list(playlist);
+        print_list(playlist);//how to make playlist inherently part of lib
     }
     else if (i==4){//view lib
         // int stdoutcopy = dup(STDOUT_FILENO);
