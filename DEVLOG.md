@@ -63,3 +63,10 @@
 - users can now pause songs: 10 minutes
 - users can now skip songs: 10 minutes
 - users can now rewind songs: 15 minutes
+
+### 2024-01-10 - songs, server
+- researched mpg123: 15 minutes
+- tested mp3 file with mpg123: 10 minutes
+- added ten songs to library: 20 minutes
+- fixed server's four compile errors: 30 minutes
+- tested server/client: 20 minutes
