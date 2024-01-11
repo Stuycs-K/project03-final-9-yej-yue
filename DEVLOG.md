@@ -23,8 +23,8 @@
 ### 2024-01-09 - troubleshooting and server/client 
 - actually fixing makefile and compiling issues: 50 min 
 - working on server/client connection and exchanging information between them: 60 min
-
-
+### 2024-01-10 - server/client 
+- adding functionality with server and client: 2 hr
 
 ## Jennifer Ye
 
