@@ -27,8 +27,10 @@ void clientLogic(int server_socket) {
     char input[BUFFER_SIZE];
     char song[BUFFER_SIZE];
     char artist[BUFFER_SIZE];
+    char playlist[BUFFER_SIZE];
+    char* str;
     char out[32];
-    printf("enter letter:\n");
+    printf("enter command:\n");
     fgets(out, sizeof(out), stdin);
     write(server_socket, out, sizeof(out));
     if (strncmp(out, "a", 1)==0){
@@ -41,19 +43,58 @@ void clientLogic(int server_socket) {
         strtok(artist, "\n"); 
 
         printf("ADDED %s, %s\n", song, artist);
+        str = malloc(strlen(song)+strlen(artist)+4);
+        if (str != NULL){
+            strcat(str, song);
+            strcat(str, ", ");
+            strcat(str, artist);
+        }
+        // printf("input: %s\n", str);
+        write(server_socket, str, strlen(str)+1);
+        read(server_socket, str, strlen(str)+1);
+        // printf("modified: %s \n", str);
+    }
+    else if (strncmp(out, "vplaylist", 9)==0){
+        printf("enter playlist name:\n");
+        fgets(playlist, sizeof(playlist), stdin);
+        printf("VIEWING %s\n", playlist);
+        write(server_socket, playlist, sizeof(playlist));
+    }
+    else if (strncmp(out, "d", 1)==0){
+        
+    }
+    else if (strncmp(out, "m", 1)==0){
+        printf("name for playlist: \n");
+        fgets(playlist, sizeof(playlist), stdin);
+        printf("how many songs? \n");
+        fgets(input, sizeof(input), stdin);
+        int num = atoi(input);
+        str = malloc(strlen(playlist)+strlen(input)+4);
+        if (str != NULL){
+            strcat(str, playlist);
+            // strcat(str, ", ");
+            strcat(str, input);
+            // strcat(str, "\n");
+        }
+        for (int i = 0; i<num; i++){
+            printf("enter song name: ");
+            fgets(song, sizeof(song), stdin);
+            strtok(song, "\n"); 
 
-        write(server_socket, input, sizeof(input));
-        read(server_socket, input, sizeof(input));
-        printf("modified: %s \n", input);
+            printf("enter artist name: ");
+            fgets(artist, sizeof(artist), stdin);
+            strtok(artist, "\n"); 
+
+            strcat(str, song);
+            strcat(str, ", ");
+            strcat(str, artist);
+            strcat(str, "\n");
+        }
+        write(server_socket, str, strlen(str)+1);
+
     }
-    else if (strncmp(in, "v", 1)==0){
-        printf("viewing playlist:\n");
-    }
-    else if (strncmp(in, "d", 1)==0){
-        
-    }
-    else if (strncmp(in, "s", 1)==0){
-        
+    else if (strncmp(out, "vlib", 4)==0){
+
     }
 }
 
