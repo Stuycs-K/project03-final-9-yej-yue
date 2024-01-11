@@ -12,13 +12,16 @@ struct node {
     char artist[100]; 
     struct node *next;
 };
-
+struct lists{
+    struct node* song;
+    char pname[100]; 
+};
 void printsong(struct node* t);
 struct node* makesong(char* song, char* singer, struct node* n);
 int compare_artist(struct node* one, struct node* two);
 int compare_song(struct node* one, struct node* two);
 struct node* insert_in_order(struct node* new, struct node* list);
-void print_list(struct node *);
+void print_list(struct node* );
 struct node* insert_front(struct node* t, char* song, char* artist);
 struct node* find_song_by_artist(char* artist, struct node* t);
 struct node* find_song(char* singa, char*song, struct node* t);

@@ -61,6 +61,7 @@ void subserver_logic(int client_socket, struct node** lib, int i) {
         int songnum = atoi(num);
         char* song[songnum];
         char* artist[songnum];
+        struct lists playl = createPlaylist(playlistName, makesong(song[0], artist[0], NULL));
         for (int k = 0; k < songnum; k++) {
             song[k] = strtok(NULL, ", ");
             printf("song %s\n", song[k]);
@@ -68,13 +69,17 @@ void subserver_logic(int client_socket, struct node** lib, int i) {
             printf("artist %s\n", artist[k]);
             // add_song(makesong(song[k], artist[k], NULL), playlist);
         }
-        struct node* playlist = makesong(song[0], artist[0], NULL);
-        add_song(makesong(song[0], artist[0], NULL), lib);
+        // struct node* playlist = makesong(song[0], artist[0], NULL);
+        // add_song(makesong(song[0], artist[0], NULL), lib);
+        
         for (int k = 1; k<songnum; k++){
-            playlist = insert_in_order(makesong(song[k], artist[k], NULL), playlist);
-            add_song(makesong(song[k], artist[k], NULL), lib);
+            // lib[0] = insert_in_order(makesong(song[k], artist[k], NULL), lib[0]);
+            // add_song(makesong(song[k], artist[k], NULL), lib);
+            //change these to adding to playlist not to lib
         }
-        print_list(playlist);//how to make playlist inherently part of lib
+        printf("%s\n", playl.pname);
+        print_list(playl.song);
+        // print_list(lib[0]);//how to make playlist inherently part of lib
     }
     else if (i==4){//view lib
         // int stdoutcopy = dup(STDOUT_FILENO);

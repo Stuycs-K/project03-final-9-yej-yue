@@ -20,6 +20,9 @@ void print_list(struct node* t) {
         temp = temp->next;
     }
 }
+// void print_list(struct lists l){
+
+// }
 int compare_artist(struct node* one, struct node* two){
     if (strcmp(one->artist, two->artist) > 0){
         return 1;
@@ -80,6 +83,7 @@ struct node* insert_in_order(struct node* new, struct node* list){
 }
 struct node* insert_front(struct node* t, char* song, char* artist) {
     struct node* new = makesong(song, artist, t);
+    // l->song = new;
     return new;
 }
 struct node* rand_song(struct node* t){

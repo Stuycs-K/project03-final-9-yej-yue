@@ -69,7 +69,7 @@ void clientLogic(int server_socket) {
         printf("how many songs? \n");
         fgets(input, sizeof(input), stdin);
         int num = atoi(input);
-        str = malloc(strlen(playlist)+strlen(input)+4);
+        str = malloc(BUFFER_SIZE);
         if (str != NULL){
             strcat(str, playlist);
             // strcat(str, ", ");
