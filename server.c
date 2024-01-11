@@ -30,7 +30,7 @@ static void sighandler(int signo) {
 void subserver_logic(int client_socket, struct node** lib, int i) {
     char input[BUFFER_SIZE];
     read(client_socket, input, sizeof(input));
-    // printf("%s\n", input);
+    // printf("input server %s\n", input);
 
     if (i == 0) {
         char* song = strtok(input, ",");//change to strsep
@@ -41,7 +41,7 @@ void subserver_logic(int client_socket, struct node** lib, int i) {
         printf("song added: %s, %s\n", song, artist);
     } 
     else if(i==1){//view
-        char* playlist = strtok(input+8, "\n");//connect playlist name w libs
+        char* playlist = strtok(input, "\n");//connect playlist name w libs
         printf("%s\n", playlist);
         //print_list();//except something with lib
 
