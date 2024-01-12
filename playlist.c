@@ -28,7 +28,7 @@ struct lists* insertplaylist(struct lists* new, struct lists* existing){
         return existing;
     }
     else {
-        return NULL;
+        return new;
     }
 }
 
