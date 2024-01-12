@@ -55,8 +55,8 @@ void addSong2Playlist(struct node* song, char* playlistName, struct lists* playl
     // playlist-> song = target->song;
 }
 
-void printPlaylist(char* playlistName, struct lists* playlist) {
-    struct lists* temp = findPlaylist(playlistName, playlist);
+void printPlaylist(char* playlistName, struct lists** playlist) {
+    struct lists* temp = findPlaylist(playlistName, *playlist);
     int i = 0;
     while(temp->song != NULL) {
         printf("[%d] ", i);
