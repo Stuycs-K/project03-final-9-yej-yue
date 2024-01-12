@@ -109,6 +109,12 @@ int main(int argc, char* argv[]) {
     // struct node** library = makelib();
     int clientCount = 1;
     struct lists** playlistlib = calloc(50, sizeof(struct lists*));
+    *playlistlib = createPlaylist("hi", makesong("a", "b", NULL), NULL);
+    *playlistlib = insertplaylist(createPlaylist("a", makesong("s", "f", NULL), NULL), *playlistlib);
+    *playlistlib = insertplaylist(createPlaylist("b", makesong("s", "f", NULL), NULL), *playlistlib);
+    *playlistlib = insertplaylist(createPlaylist("z", makesong("s", "f", NULL), NULL), *playlistlib);
+    printallplaylist(playlistlib);
+    printf("done print all\n");
 
     int pcountShmid;
     int* PSCp;
@@ -164,6 +170,7 @@ int main(int argc, char* argv[]) {
                 printf("playlist count %d\n", *childPSCp);
                 // *childLSp = *playlistlib;
                 printf("playlist name %s\n", (*childLSp)->pname);
+                printallplaylist(childLSp);
                 // *childLSp -= ((*childPSCp)-1)*sizeof(struct lists*);
                 exit(0);
             }
@@ -175,8 +182,8 @@ int main(int argc, char* argv[]) {
         } 
         else {
             wait(NULL);
-            printf("playlist count %d\n", *childPSCp);
-            printf("playlist name %s\n", (*childLSp)->pname);
+            printf("outside of fork playlist count %d\n", *childPSCp);
+            printf("outside of fork playlist name %s\n", (*childLSp)->pname);//empty?????
             shmdt(childPSCp);
             shmdt(childLSp);
             close(client_socket);

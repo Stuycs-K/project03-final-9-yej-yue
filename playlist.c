@@ -24,8 +24,11 @@ struct lists* insertplaylist(struct lists* new, struct lists* existing){
             }
         }
         new->next = temp;
-        prev->next = new;
-        return existing;
+        if (existing != temp){
+            prev->next = new;
+            return existing;
+        }
+        return new;
     }
     else {
         return new;
@@ -66,6 +69,20 @@ void printPlaylist(char* playlistName, struct lists** playlist) {
     }
 }
 
+void printallplaylist(struct lists** playlist){
+    struct lists* temp = *playlist;
+    while(temp != NULL){
+        printf("%s\n", temp->pname);
+        int i = 0;
+        while(temp->song != NULL) {
+            printf("[%d] ", i);
+            printsong(temp->song);
+            i++;
+            temp->song = temp->song->next;
+        }    
+        temp = temp->next;
+    }
+}
 void deletePlaylist(char* playlistName, struct lists* playlist) {
     struct lists* target = findPlaylist(playlistName, playlist);
     if (target != NULL) {
