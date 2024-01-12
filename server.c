@@ -6,6 +6,12 @@
 #include "err.h"
 #include <sys/shm.h>
 #define key 111111
+#define key1 111112
+struct sharedmem{
+    int playlistcount;
+    struct lists playlists[50];
+    // int playlistcount;
+};
 // allow server to read from multiple clients (include numbered clients)
 // check audio functions with mpg123
 // fix signals
@@ -99,12 +105,13 @@ struct lists* subserver_logic(int client_socket, struct lists** lib, int i, int 
     }
     printf("end of subserver\n");
     // write(client_socket, input, sizeof(input));
-    struct lists* temp = *lib;
-    printf("playlist %s\n", temp->pname); 
+    // struct lists* temp = *lib;
+    // printf("playlist %s\n", temp->pname); 
     return *lib;
 }
 
 int main(int argc, char* argv[]) {
+    
     signal(SIGINT, sighandler);
     signal(SIGQUIT, sighandler);
     signal(SIGTSTP, sighandler);
@@ -114,13 +121,19 @@ int main(int argc, char* argv[]) {
     int listen_socket = server_setup();
     // struct node** library = makelib();
     int clientCount = 1;
-    int playlistcount=0;
+    // int playlistcount=0;
+    struct lists** playlistlib = calloc(50, sizeof(struct lists*));
+    // int size = sizeof(int)+50*sizeof(struct lists*);
     int pcountShmid;
-    int* PCSp; 
-    pcountShmid = shmget(key, sizeof(int), IPC_CREAT|0644);
-    err(pcountShmid, "shmget didn't work in main\n");
-    PCSp = shmat(pcountShmid, 0, 0);
-    struct lists** playlistlib = calloc(50, sizeof(struct lists*));//make this and count shared mem
+    shmctl(pcountShmid, IPC_RMID, 0);
+    // int* PCSp; 
+
+    //trying two different shared mem things instead of one shared mem block
+    pcountShmid = shmget(key, sizeof(int), IPC_CREAT|0644);//sizeof(int)+50*sizeof(struct lists*) and (struct lists) also doesn't work
+    err(pcountShmid, "pcount shmget didn't work in main\n");
+    int listsShmid = shmget(key1, 6000, IPC_CREAT|0644);//using static 6000 instead smh
+    err(listsShmid, "lists shmget didn't work in main\n");
+    // PCSp = shmat(pcountShmid, 0, 0);
 
     while (1) {
         int childPCshmid;
@@ -128,6 +141,11 @@ int main(int argc, char* argv[]) {
         int* childPSCp;
         err(childPCshmid, "shmget didn't work in while\n");
         childPSCp = shmat(childPCshmid, 0, 0);
+
+        int childLshmid;
+        childLshmid = shmget(key1, 6000, 0);
+        err(childLshmid, "lists shmget didn't work in while\n");
+        struct lists* childLSp = shmat(childLshmid, 0, 0);//or should it be *playlist = shmat??? idk
         int client_socket = server_tcp_handshake(listen_socket);
         // printf("\nKEYBOARD COMMANDS: 'ctrl+c' to exit, 'ctrl+q' to play, 'ctrl+z' to pause, 'ctrl+s' to rewind, 'ctrl+\\' to skip\n \n");
         printf("press 'm' to make a playlist, 'vplaylist' to view a specific playlist, 'vlib' to view library, 'a' to add a song, 'd' to delete song or playlist\n \n");
@@ -143,12 +161,8 @@ int main(int argc, char* argv[]) {
                 exit(0);
             }
             else if (strcmp(in, "vplaylist\n")==0){
-                // struct lists* temp = *playlistlib;
-                // printf("playlist %s\n", temp->pname); 
-                // printf("%s\n", (*playlistlib)->pname); doesn't do any of this or after stuff 
                 printf("printing playlist ");
                 *playlistlib = subserver_logic(client_socket, playlistlib, 1, *childPSCp);
-                // printPlaylist("hi", *playlistlib);
                 exit(0);
             }
             else if (strcmp(in, "d\n")==0){
@@ -158,10 +172,9 @@ int main(int argc, char* argv[]) {
                 *playlistlib = subserver_logic(client_socket, playlistlib, 3, *childPSCp);
                 (*childPSCp)++;
                 printf("playlist count %d\n", *childPSCp);
-                // printPlaylist("hi", *playlistlib);
-                // struct lists* temp = *playlistlib;
-                // printf("playlist %s\n", temp->pname);
-                // printf("playlist %s\n", (*playlistlib)->pname); doesn't do this
+                // childPSCp+=sizeof(int)+(*childPSCp)*sizeof(struct lists*);
+                // *childPSCp=*playlistlib;
+                printf("playlist name %s\n", (*playlistlib)->pname);
                 exit(0);
             }
             else if (strcmp(in, "vlib\n")==0){
