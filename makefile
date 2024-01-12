@@ -1,11 +1,10 @@
 compile: lib.o list.o err.o playlist.o _server _client
-#audio not included anywhere yet
-# main: main.o
-# 	gcc -o main main.o
-# 	./main
-
-# main.o: main.c list.h lib.h connect.h err.h
-# 	@gcc -c -L/SDL/include/SDL3 -lSDL3 main.c 
+runme: main.o lib.o list.o err.o audio.o playlist.o
+	@gcc -o runme lib.o list.o err.o audio.o playlist.o main.o
+main.o: main.c lib.h list.h err.h audio.h playlist.h
+	@gcc -c -o main.o main.c
+run: runme
+	@./runme
 _server: server.o connect.o lib.o list.o err.o audio.o playlist.o
 	gcc -o server server.o connect.o lib.o list.o err.o audio.o playlist.o
 _client: client.o connect.o err.o
