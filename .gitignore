@@ -37,6 +37,7 @@
 *.hex
 server
 client
+runme
 
 # Debug files
 *.dSYM/

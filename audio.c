@@ -4,9 +4,9 @@
 
 char currSong[1024] = "";
 
-void play(struct node* song) {
+void play(char* songName) {
     char command[256];
-    snprintf(command, sizeof(command), "mpg123 \"./music/%s\"", song-> name);
+    snprintf(command, sizeof(command), "mpg123 \"./music/%s\"", songName);
     
     if (system(command) == -1) {
         err(errno, "error playing the song \n");

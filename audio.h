@@ -10,7 +10,7 @@
 
 extern char currSong[1024];
 
-void play(struct node* song);
+void play(char* songName);
 void ppause();
 void skip(struct node* nextSong);
 void rrewind(struct node* song);
