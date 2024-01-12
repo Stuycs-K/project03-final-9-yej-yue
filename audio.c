@@ -1,11 +1,12 @@
-#include "list.h"
 #include "audio.h"
+#include "list.h"
+#include "connect.h"
+
+char currSong[1024] = "";
 
 void play(struct node* song) {
     char command[256];
-    strcpy(command, "mpg123 \"");
-    strcat(command, song-> name);
-    strcat(command, "\"");
+    snprintf(command, sizeof(command), "mpg123 \"./music/%s\"", song-> name);
     
     if (system(command) == -1) {
         err(errno, "error playing the song \n");
@@ -33,4 +34,8 @@ void rrewind(struct node* song) {
     }
     play(song);
     printf("song rewound \n");
+}
+
+void getCurrSong(char* song) {
+    strcpy(song, currSong);
 }
