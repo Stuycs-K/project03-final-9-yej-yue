@@ -53,9 +53,11 @@ void subserver_logic(int client_socket, struct lists** lib, int i) {
     else if(i==1){//view
         char* playlistname = strtok(input, "\n");//connect playlist name w libs
         printf("%s\n", playlistname);
-        // struct lists* target = findPlaylist(playlistname, *lib);//how to search through????
         printPlaylist(playlistname, *lib);
-        //print_listexcept something with lib
+
+        //try make sample playlist and print
+        struct lists* playl = createPlaylist("hi", makesong("hey", "h", NULL), NULL);
+        printPlaylist("hey", playl);
     }
     // else if (i == 2) {
     //     char song[BUFFER_SIZE];
