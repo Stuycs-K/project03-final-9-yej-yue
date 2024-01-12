@@ -12,13 +12,15 @@
 #include <netdb.h>
 #include "err.h"
 
-
 #ifndef NETWORKING_H
 #define NETWORKING_H
+
 #define PORT "19230"
 #define BUFFER_SIZE 1024
 
 int server_setup();
 int client_tcp_handshake(char*server_address);
 int server_tcp_handshake(int listen_socket);
+void sendSong(int server_socket, char* song);
+
 #endif
