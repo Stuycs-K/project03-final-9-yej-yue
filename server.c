@@ -51,13 +51,17 @@ void subserver_logic(int client_socket, struct lists** lib, int i) {
         printf("song added: %s, %s\n", song, artist);
     } 
     else if(i==1){//view
-        char* playlistname = strtok(input, "\n");//connect playlist name w libs
+        char* playlistname = strtok(input, "\n");
         printf("%s\n", playlistname);
         printPlaylist(playlistname, *lib);
 
         //try make sample playlist and print
-        struct lists* playl = createPlaylist("hi", makesong("hey", "h", NULL), NULL);
-        printPlaylist("hey", playl);
+        // struct lists* playl = createPlaylist("hi", makesong("hey", "h", NULL), NULL);//haven't put it into lib!!
+        // *(lib+playlistcount)=playl;
+        // struct lists* found = findPlaylist("hi", *lib);
+        // printf("%s\n", found->pname);
+        // printPlaylist(found->pname, *lib);
+
     }
     // else if (i == 2) {
     //     char song[BUFFER_SIZE];
@@ -91,7 +95,7 @@ void subserver_logic(int client_socket, struct lists** lib, int i) {
         printf("name of playlist: %s\n", (*lib)->pname);
         // *(lib+playlistcount) = *lib;
         // playlistcount++;//stays 1?
-        printf("%d\n", playlistcount);
+        // printf("%d\n", playlistcount);
         print_list((*lib)->song);
     }
     else if (i==4){//view lib
