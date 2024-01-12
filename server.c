@@ -38,9 +38,8 @@ struct lists* subserver_logic(int client_socket, struct lists** lib, int i) {
         char* song = strtok(input, ", ");
         char* artist = strtok(NULL, ", ");
         char* playlistname = strtok(NULL, "\n");
-        printf("added %s by %s to %s\n", song, artist, playlistname);
+        printf("adding %s by %s to %s\n", song, artist, playlistname);
         addSong2Playlist(makesong(song, artist, NULL), playlistname, *lib);
-
         printf("song added: %s, %s\n", song, artist);
     } 
     else if(i==1){//view
@@ -56,11 +55,6 @@ struct lists* subserver_logic(int client_socket, struct lists** lib, int i) {
         // printPlaylist(found->pname, *lib);
 
     }
-    // else if (i == 2) {
-    //     char song[BUFFER_SIZE];
-    //     getCurrSong(song);
-    //     printf("\"song\" %s is currently being played \n", song);
-    // }
     else if (i==2){
         printf("delete playlist or song?\n");
         playlistcount--;
@@ -104,9 +98,10 @@ struct lists* subserver_logic(int client_socket, struct lists** lib, int i) {
     else {
         err(errno, "invalid command \n");
     }
+    printf("end of subserver\n");
     // write(client_socket, input, sizeof(input));
-    // struct lists* temp = *lib;
-    // printf("playlist %s\n", temp->pname); doesn't even do this.
+    struct lists* temp = *lib;
+    printf("playlist %s\n", temp->pname); 
     return *lib;
 }
 
@@ -138,7 +133,9 @@ int main(int argc, char* argv[]) {
                 exit(0);
             }
             else if (strcmp(in, "vplaylist\n")==0){
-                // printf("%s\n", (*playlistlib)->pname);
+                // struct lists* temp = *playlistlib;
+                // printf("playlist %s\n", temp->pname); 
+                // printf("%s\n", (*playlistlib)->pname); doesn't do any of this or after stuff 
                 printf("printing playlist ");
                 *playlistlib = subserver_logic(client_socket, playlistlib, 1);
                 // printPlaylist("hi", *playlistlib);
@@ -150,7 +147,7 @@ int main(int argc, char* argv[]) {
             else if (strcmp(in, "m\n")==0){
                 *playlistlib = subserver_logic(client_socket, playlistlib, 3);
                 // printPlaylist("hi", *playlistlib);
-                struct lists* temp = *playlistlib;
+                // struct lists* temp = *playlistlib;
                 // printf("playlist %s\n", temp->pname);
                 // printf("playlist %s\n", (*playlistlib)->pname); doesn't do this
                 exit(0);

@@ -45,28 +45,20 @@ struct lists* findPlaylist(char* playlistName, struct lists* playlist) {
 
 
 void addSong2Playlist(struct node* song, char* playlistName, struct lists* playlist) {
-    struct lists* target = findPlaylist(playlistName, playlist);
-    if (target != NULL) {
-        target->song = insert_in_order(makesong(song-> name, song-> artist, NULL), target->song);
+    playlist = findPlaylist(playlistName, playlist);
+    if (playlist != NULL) {
+        playlist->song = insert_in_order(makesong(song-> name, song-> artist, NULL), playlist->song);
     } 
     else {
         err(errno, "playlist not found \n");
     }
-    playlist-> song = target->song;
+    // playlist-> song = target->song;
 }
 
 void printPlaylist(char* playlistName, struct lists* playlist) {
     struct lists* temp = findPlaylist(playlistName, playlist);
-    // if (target != NULL) {
-    //     printf("playlist: %s \n", playlistName);
-    //     print_list(*target->song);
-    // } 
-    // else {
-    //     err(errno, "playlist not found \n");
-    // }
-    // struct lists* temp = playlist;
     int i = 0;
-    while(temp != NULL) {
+    while(temp->song != NULL) {
         printf("[%d] ", i);
         printsong(temp->song);
         i++;
