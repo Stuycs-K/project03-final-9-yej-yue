@@ -39,6 +39,10 @@ void clientLogic(int server_socket) {
     fgets(out, sizeof(out), stdin);
     write(server_socket, out, sizeof(out));
     if (strncmp(out, "a", 1)==0){
+        printf("which playlist? ");
+        fgets(playlist, sizeof(playlist), stdin);
+        strtok(playlist, "\n");
+
         printf("enter song name: ");
         fgets(song, sizeof(song), stdin);
         strtok(song, "\n"); 
@@ -47,12 +51,14 @@ void clientLogic(int server_socket) {
         fgets(artist, sizeof(artist), stdin);
         strtok(artist, "\n"); 
 
-        printf("ADDED %s, %s\n", song, artist);
-        str = malloc(strlen(song)+strlen(artist)+4);
+        printf("ADDED %s, %s to %s\n", song, artist, playlist);
+        str = malloc(strlen(song)+strlen(artist)+strlen(playlist)+4);
         if (str != NULL){
             strcat(str, song);
             strcat(str, ", ");
             strcat(str, artist);
+            strcat(str, ", ");
+            strcat(str, playlist);
         }
         // printf("input: %s\n", str);
         write(server_socket, str, strlen(str)+1);

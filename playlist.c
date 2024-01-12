@@ -55,16 +55,24 @@ void addSong2Playlist(struct node* song, char* playlistName, struct lists* playl
     playlist-> song = target->song;
 }
 
-// void printPlaylist(char* playlistName, struct lists* playlist) {
-//     // struct lists* target = findPlaylist(playlistName, playlist);
-//     // if (target != NULL) {
-//     //     printf("playlist: %s \n", playlistName);
-//     //     print_list(*target->song);
-//     // } 
-//     // else {
-//     //     err(errno, "playlist not found \n");
-//     // }
-// }
+void printPlaylist(char* playlistName, struct lists* playlist) {
+    struct lists* temp = findPlaylist(playlistName, playlist);
+    // if (target != NULL) {
+    //     printf("playlist: %s \n", playlistName);
+    //     print_list(*target->song);
+    // } 
+    // else {
+    //     err(errno, "playlist not found \n");
+    // }
+    // struct lists* temp = playlist;
+    int i = 0;
+    while(temp != NULL) {
+        printf("[%d] ", i);
+        printsong(temp->song);
+        i++;
+        temp->song = temp->song->next;
+    }
+}
 
 void deletePlaylist(char* playlistName, struct lists* playlist) {
     struct lists* target = findPlaylist(playlistName, playlist);
