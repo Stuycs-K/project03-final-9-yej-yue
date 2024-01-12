@@ -28,6 +28,9 @@
 ### 2024-01-11 - altering playlist code
 - writing playlist functions: 1 hr 
 - implementing playlist things in server: 1 hr
+### 2024-01-12 - altering playlist code and server
+- figuring out issues in server and playlist functions: 2 hr
+### 2024-01-13 to -15 - fixing playlist, server, shared memory
 
 ## Jennifer Ye
 
