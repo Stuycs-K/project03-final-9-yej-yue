@@ -14,6 +14,7 @@ struct node {
 };
 struct lists{
     struct node* song;
+    struct lists* next;
     char pname[100]; 
 };
 void printsong(struct node* t);

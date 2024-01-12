@@ -26,7 +26,8 @@
 ### 2024-01-10 - server/client 
 - adding functionality with server and client: 2 hr
 ### 2024-01-11 - altering playlist code
-
+- writing playlist functions: 1 hr 
+- implementing playlist things in server: 1 hr
 
 ## Jennifer Ye
 

@@ -21,8 +21,8 @@ static void sighandler(int signo) {
         printf("enter the song title: ");
         fgets(song, sizeof(song), stdin);
         strtok(song, "\n");
-        play(song);    
-        sendSong(server_socket, song);
+        // play(song);    
+        // sendSong(server_socket, song);
     }
     // if (signo == SIGSTOP){//ctrl s
     //     rrewind(currSong);

@@ -8,6 +8,8 @@
 // allow server to read from multiple clients (include numbered clients)
 // check audio functions with mpg123
 // fix signals
+struct lists** playlistlib;
+int playlistcount=0;
 
 static void sighandler(int signo) {
     if (signo == SIGINT){//ctrl c
@@ -32,6 +34,7 @@ static void sighandler(int signo) {
 void subserver_logic(int client_socket, struct node** lib, int i) {
     char input[BUFFER_SIZE];
     read(client_socket, input, sizeof(input));
+    struct lists* playl;
     // printf("input server %s\n", input);
 
     if (i == 0) {
@@ -43,49 +46,46 @@ void subserver_logic(int client_socket, struct node** lib, int i) {
         printf("song added: %s, %s\n", song, artist);
     } 
     else if(i==1){//view
-        char* playlist = strtok(input, "\n");//connect playlist name w libs
-        printf("%s\n", playlist);
-        //print_list();//except something with lib
+        char* playlistname = strtok(input, "\n");//connect playlist name w libs
+        printf("%s\n", playlistname);
+        struct lists* target = findPlaylist(playlistname, playl);//how to search through????
+        print_list(target->song);
+        //print_listexcept something with lib
     }
-    else if (i == 2) {
-        char song[BUFFER_SIZE];
-        getCurrSong(song);
-        printf("\"song\" %s is currently being played \n", song);
+    // else if (i == 2) {
+    //     char song[BUFFER_SIZE];
+    //     getCurrSong(song);
+    //     printf("\"song\" %s is currently being played \n", song);
+    // }
+    else if (i==2){
+        printf("delete playlist or song?\n");
+        playlistcount--;
     }
     else if (i == 3) {
         printf("asking for playlist info \n");
         char* playlistName = strtok(input, "\n");
-        // printf("%s\n", playlistName);
-
-        // *playlist = (struct node*)malloc(sizeof(struct node));
-        // (*playlist)->name = malloc(strlen(playlistName) + 1);
-        // strcpy((*playlist)->name, playlistName);//but *playlist->name is name of song in playlist
-        // printf("%s\n", (*playlist)->name);
-
         char* num = strtok(input+strlen(playlistName)+1, "\n");
-        // printf("%s\n",num);
         int songnum = atoi(num);
         char* song[songnum];
         char* artist[songnum];
-        struct lists playl = createPlaylist(playlistName, makesong(song[0], artist[0], NULL));
         for (int k = 0; k < songnum; k++) {
             song[k] = strtok(NULL, ", ");
             printf("song %s\n", song[k]);
             artist[k] = strtok(NULL, "\n");
             printf("artist %s\n", artist[k]);
-            // add_song(makesong(song[k], artist[k], NULL), playlist);
         }
-        // struct node* playlist = makesong(song[0], artist[0], NULL);
-        // add_song(makesong(song[0], artist[0], NULL), lib);
-        
+        if (playlistcount==0){
+            playl = createPlaylist(playlistName, makesong(song[0], artist[0], NULL), NULL);
+        }
+        else playl = insertplaylist(createPlaylist(playlistName, makesong(song[0], artist[0], NULL), NULL), playl);
         for (int k = 1; k<songnum; k++){
-            // lib[0] = insert_in_order(makesong(song[k], artist[k], NULL), lib[0]);
-            // add_song(makesong(song[k], artist[k], NULL), lib);
-            //change these to adding to playlist not to lib
+            addSong2Playlist(makesong(song[k], artist[k], NULL), playlistName, playl);
         }
-        printf("%s\n", playl.pname);
-        print_list(playl.song);
-        // print_list(lib[0]);//how to make playlist inherently part of lib
+        printf("name of playlist: %s\n", playl->pname);
+        // *(playlistlib+playlistcount) = playl;
+        playlistcount++;//stays 1
+        printf("%d\n", playlistcount);
+        print_list(playl->song);
     }
     else if (i==4){//view lib
         // int stdoutcopy = dup(STDOUT_FILENO);
@@ -111,37 +111,39 @@ int main(int argc, char* argv[]) {
     struct node** lib = makelib();
     int clientCount = 1;
 
-    printf("\nKEYBOARD COMMANDS: 'ctrl+c' to exit, 'ctrl+q' to play, 'ctrl+z' to pause, 'ctrl+s' to rewind, 'ctrl+\\' to skip \n");
-    printf("press 'm' to make a playlist, 'vplaylist' to view a specific playlist, 'vlib' to view library, 'a' to add a song, 'd' to delete song \n \n");
+    // printf("\nKEYBOARD COMMANDS: 'ctrl+c' to exit, 'ctrl+q' to play, 'ctrl+z' to pause, 'ctrl+s' to rewind, 'ctrl+\\' to skip \n");
+    // printf("press 'm' to make a playlist, 'vplaylist' to view a specific playlist, 'vlib' to view library, 'a' to add a song, 'd' to delete song \n \n");
     
     while (1) {
         int client_socket = server_tcp_handshake(listen_socket);
-
+        // printf("\nKEYBOARD COMMANDS: 'ctrl+c' to exit, 'ctrl+q' to play, 'ctrl+z' to pause, 'ctrl+s' to rewind, 'ctrl+\\' to skip\n \n");
+        printf("press 'm' to make a playlist, 'vplaylist' to view a specific playlist, 'vlib' to view library, 'a' to add a song, 'd' to delete song or playlist\n \n");
         char in[32];
         read(client_socket, in, sizeof(in));
+        printf("in %s\n", in);
 
         if (fork() == 0) {
             int currClientCount = clientCount++;
             printf("waiting for client %d's command \n", currClientCount);
 
-            if (strcmp(in, "a") == 0) {
+            if (strcmp(in, "a\n") == 0) {
                 printf("asking for song info to add \n");
                 subserver_logic(client_socket, lib, 0);
                 exit(0);
             }
-            else if (strcmp(in, "vplaylist")==0){
-                printf("printing playlist \n");
+            else if (strcmp(in, "vplaylist\n")==0){
+                printf("printing playlist ");
                 subserver_logic(client_socket, lib, 1);
                 exit(0);
             }
-            else if (strcmp(in, "d")==0){
+            else if (strcmp(in, "d\n")==0){
                 
             }
-            else if (strcmp(in, "m")==0){
+            else if (strcmp(in, "m\n")==0){
                 subserver_logic(client_socket, lib, 3);
                 exit(0);
             }
-            else if (strcmp(in, "vlib")==0){
+            else if (strcmp(in, "vlib\n")==0){
                 subserver_logic(client_socket, lib, 4);
                 print_lib(lib);
                 exit(0);

@@ -11,11 +11,12 @@
 //     struct node** song;
 //     char pname[100]; 
 // };
-struct lists createPlaylist(char* playlistName, struct node* t);
-struct node** findPlaylist(char* playlistName, struct node** playlist);
-void addSong2Playlist(struct node* song, char* playlistName, struct node** playlist);
-void printPlaylist(char* playlistName, struct node** playlist);
-void deletePlaylist(char* playlistName, struct node** playlist);
-void alphabetizePlaylists(char* playlistName, struct node** playlist, struct node** library);
+struct lists* createPlaylist(char* playlistName, struct node* t, struct lists*);
+struct lists* findPlaylist(char* playlistName, struct lists* );
+struct lists* insertplaylist(struct lists* new, struct lists* existing);
+void addSong2Playlist(struct node* song, char* playlistName, struct lists* playlist);
+// void printPlaylist(char* playlistName, struct lists* playlist);
+void deletePlaylist(char* playlistName, struct lists* playlist);
+void alphabetizePlaylists(char* playlistName, struct lists* playlist, struct node** library);
 
 #endif
