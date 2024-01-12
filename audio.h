@@ -8,9 +8,12 @@
 #ifndef AUDIO_H
 #define AUDIO_H
 
+extern char currSong[1024];
+
 void play(struct node* song);
 void ppause();
 void skip(struct node* nextSong);
 void rrewind(struct node* song);
+void getCurrSong(char* song);
 
 #endif

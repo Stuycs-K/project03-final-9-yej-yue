@@ -5,26 +5,28 @@
 #include "playlist.h"
 #include "err.h"
 
-struct node* currSong;
-struct node* nextSong;
+// allow server to read from multiple clients (include numbered clients)
+// check audio functions with mpg123
+// fix signals
 
 static void sighandler(int signo) {
     if (signo == SIGINT){//ctrl c
-        printf("\nexiting music player\n");
+        printf("\nexiting music player \n");
         exit(0);
     }
     if (signo == SIGTSTP){//ctrl z
         pause();
     }
-    if (signo == SIGQUIT){//ctrl '\'
-        skip(nextSong);
-    }
+    // if (signo == SIGQUIT){//ctrl '\'
+    //     skip(nextSong);
+    // }
     if (signo == SIGCONT){//ctrl q
-        play(currSong);
+        char song[BUFFER_SIZE];
+        printf("song %s is currently being played \n", song);
     }
-    if (signo == SIGSTOP){//ctrl s
-        rrewind(currSong);
-    }
+    // if (signo == SIGSTOP){//ctrl s
+    //     rrewind(currSong);
+    // }
 }
 
 void subserver_logic(int client_socket, struct node** lib, int i) {
@@ -44,7 +46,11 @@ void subserver_logic(int client_socket, struct node** lib, int i) {
         char* playlist = strtok(input, "\n");//connect playlist name w libs
         printf("%s\n", playlist);
         //print_list();//except something with lib
-
+    }
+    else if (i == 2) {
+        char song[BUFFER_SIZE];
+        getCurrSong(song);
+        printf("\"song\" %s is currently being played \n", song);
     }
     else if (i == 3) {
         printf("asking for playlist info \n");
@@ -89,9 +95,8 @@ void subserver_logic(int client_socket, struct node** lib, int i) {
         // write(client_socket, temp, sizeof(temp));
     }
     else {
-        printf("invalid command");
+        err(errno, "invalid command \n");
     }
-
     // write(client_socket, input, sizeof(input));
 }
 
@@ -101,35 +106,44 @@ int main(int argc, char* argv[]) {
     signal(SIGTSTP, sighandler);
     signal(SIGCONT, sighandler);
     signal(SIGSTOP, sighandler);
+
     int listen_socket = server_setup();
     struct node** lib = makelib();
+    int clientCount = 1;
+
+    printf("\nKEYBOARD COMMANDS: 'ctrl+c' to exit, 'ctrl+q' to play, 'ctrl+z' to pause, 'ctrl+s' to rewind, 'ctrl+\\' to skip \n");
+    printf("press 'm' to make a playlist, 'vplaylist' to view a specific playlist, 'vlib' to view library, 'a' to add a song, 'd' to delete song \n \n");
     
     while (1) {
         int client_socket = server_tcp_handshake(listen_socket);
-        printf("\nKEYBOARD COMMANDS: 'ctrl+c' to exit, 'ctrl+q' to play, 'ctrl+z' to pause, 'ctrl+s' to rewind, 'ctrl+\\' to skip\n \n");
-        printf("press 'm' to make a playlist, 'vplaylist' to view a specific playlist, 'vlib' to view library, 'a' to add a song, 'd' to delete song\n");
+
         char in[32];
         read(client_socket, in, sizeof(in));
+
         if (fork() == 0) {
-            if (strncmp(in, "a", 1)==0){
-                printf("asking for song info to add\n");
+            int currClientCount = clientCount++;
+            printf("waiting for client %d's command \n", currClientCount);
+
+            if (strcmp(in, "a") == 0) {
+                printf("asking for song info to add \n");
                 subserver_logic(client_socket, lib, 0);
                 exit(0);
             }
-            else if (strncmp(in, "vplaylist", 9)==0){
+            else if (strcmp(in, "vplaylist")==0){
                 printf("printing playlist \n");
                 subserver_logic(client_socket, lib, 1);
                 exit(0);
             }
-            else if (strncmp(in, "d", 1)==0){
+            else if (strcmp(in, "d")==0){
                 
             }
-            else if (strncmp(in, "m", 1)==0){
+            else if (strcmp(in, "m")==0){
                 subserver_logic(client_socket, lib, 3);
                 exit(0);
             }
-            else if (strncmp(in, "vlib", 4)==0){
+            else if (strcmp(in, "vlib")==0){
                 subserver_logic(client_socket, lib, 4);
+                print_lib(lib);
                 exit(0);
             }
         } 

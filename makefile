@@ -9,11 +9,11 @@ compile: lib.o list.o err.o playlist.o _server _client
 _server: server.o connect.o lib.o list.o err.o audio.o playlist.o
 	gcc -o server server.o connect.o lib.o list.o err.o audio.o playlist.o
 _client: client.o connect.o err.o
-	gcc -o client client.o connect.o err.o 
+	@gcc -o client client.o connect.o err.o 
 server: _server	
-	./server
+	@./server
 client: _client
-	./client 
+	@./client 
 audio.o: audio.c err.h
 	@gcc -c audio.c -I/SDL/include/SDL3
 connect.o: connect.c err.h 
@@ -31,8 +31,8 @@ err.o: err.c err.h
 playlist.o: playlist.c playlist.h
 	@gcc -c playlist.c
 clean:
-	rm -f *.o
-	rm -f runme
-	rm -f *.h.gch
-	rm -f server
-	rm -f client
+	@rm -f *.o
+	@rm -f runme
+	@rm -f *.h.gch
+	@rm -f server
+	@rm -f client

@@ -25,6 +25,8 @@
 - working on server/client connection and exchanging information between them: 60 min
 ### 2024-01-10 - server/client 
 - adding functionality with server and client: 2 hr
+### 2024-01-11 - altering playlist code
+
 
 ## Jennifer Ye
 
@@ -70,3 +72,8 @@
 - added ten songs to library: 20 minutes
 - fixed server's four compile errors: 30 minutes
 - tested server/client: 20 minutes
+
+### 2024-01-11 - server/client troubleshooting to play a song
+- edited makefile to be neater: 5 minutes
+- SIGCONT / ctrl+q implementation in server, client: 45 minutes
+- getCurrSong and sendSong functions as part of server/client communication: 30 minutes

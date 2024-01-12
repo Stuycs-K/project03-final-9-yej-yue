@@ -16,9 +16,14 @@ static void sighandler(int signo) {
     // if (signo == SIGQUIT){//ctrl '\'
     //     skip(nextSong);
     // }
-    // if (signo == SIGCONT){//ctrl q
-    //     play(currSong);
-    // }
+    if (signo == SIGCONT){//ctrl q
+        char song[BUFFER_SIZE];
+        printf("enter the song title: ");
+        fgets(song, sizeof(song), stdin);
+        strtok(song, "\n");
+        play(song);    
+        sendSong(server_socket, song);
+    }
     // if (signo == SIGSTOP){//ctrl s
     //     rrewind(currSong);
     // }
@@ -104,13 +109,17 @@ int main(int argc, char* argv[]) {
     signal(SIGTSTP, sighandler);
     signal(SIGCONT, sighandler);
     signal(SIGSTOP, sighandler);
+    
+    int clientCount = 1;
+
     while (1) {
         char* IP = "127.0.0.1";
         if (argc > 1) {
             IP = argv[1];
         }
         int server_socket = client_tcp_handshake(IP);
-        printf("client %d connected \n", getpid());
+        printf("client [%d] %d connected \n", clientCount, getpid());
         clientLogic(server_socket);
     }
+    int currClientCount = clientCount++;
 }
