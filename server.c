@@ -83,9 +83,10 @@ struct lists* subserver_logic(int client_socket, struct lists** lib, int i, int 
         int stdoutcopy = dup(STDOUT_FILENO);//only does all this after client exits
         int temp = open("tempfile", O_RDWR | O_CREAT | O_TRUNC, 0777);
         dup2(temp, STDOUT_FILENO);
-        // print_lib(lib);//why does it only print after client exits???
+        printallplaylist(lib);
         char contents[2*BUFFER_SIZE];
         read(temp, contents, sizeof(contents));
+        dup2(stdoutcopy, STDOUT_FILENO);
         printf("%s\n", contents);
         write(client_socket, contents, sizeof(contents));
     }
@@ -109,12 +110,13 @@ int main(int argc, char* argv[]) {
     // struct node** library = makelib();
     int clientCount = 1;
     struct lists** playlistlib = calloc(50, sizeof(struct lists*));
-    *playlistlib = createPlaylist("hi", makesong("a", "b", NULL), NULL);
-    *playlistlib = insertplaylist(createPlaylist("a", makesong("s", "f", NULL), NULL), *playlistlib);
-    *playlistlib = insertplaylist(createPlaylist("b", makesong("s", "f", NULL), NULL), *playlistlib);
-    *playlistlib = insertplaylist(createPlaylist("z", makesong("s", "f", NULL), NULL), *playlistlib);
-    printallplaylist(playlistlib);
-    printf("done print all\n");
+    // *playlistlib = createPlaylist("hi", makesong("aldf", "b", NULL), NULL);
+    // *playlistlib = insertplaylist(createPlaylist("a", makesong("a", "f", NULL), NULL), *playlistlib);
+    // *playlistlib = insertplaylist(createPlaylist("b", makesong("s", "f", NULL), NULL), *playlistlib);
+    // addSong2Playlist(makesong("fd", "dg", NULL), "b", *playlistlib);
+    // *playlistlib = insertplaylist(createPlaylist("z", makesong("s", "f", NULL), NULL), *playlistlib);
+    // printallplaylist(playlistlib);
+    // printf("done print all\n");
 
     int pcountShmid;
     int* PSCp;
@@ -140,6 +142,7 @@ int main(int argc, char* argv[]) {
         struct lists** childLSp;
         err(childLshmid, "list shmget didn't work in while\n");
         childLSp = shmat(childLshmid, 0, 0);
+        printf("waiting for client\n");
         int client_socket = server_tcp_handshake(listen_socket);
         
         // printf("\nKEYBOARD COMMANDS: 'ctrl+c' to exit, 'ctrl+q' to play, 'ctrl+z' to pause, 'ctrl+s' to rewind, 'ctrl+\\' to skip\n \n");
@@ -170,13 +173,13 @@ int main(int argc, char* argv[]) {
                 printf("playlist count %d\n", *childPSCp);
                 // *childLSp = *playlistlib;
                 printf("playlist name %s\n", (*childLSp)->pname);
-                printallplaylist(childLSp);
+                printf("song? %s\n", ((*childLSp)->song)->name);
+                // printallplaylist(childLSp);
                 // *childLSp -= ((*childPSCp)-1)*sizeof(struct lists*);
                 exit(0);
             }
             else if (strcmp(in, "vlib\n")==0){
                 *playlistlib = subserver_logic(client_socket, childLSp, 4, *childPSCp);
-                // print_lib(lib);
                 exit(0);
             }
         } 
