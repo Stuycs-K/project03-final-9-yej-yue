@@ -29,7 +29,7 @@ static void sighandler(int signo) {
     // }
 }
 void clientLogic(int server_socket) {
-    char input[BUFFER_SIZE];
+    char input[2*BUFFER_SIZE];
     char song[BUFFER_SIZE];
     char artist[BUFFER_SIZE];
     char playlist[BUFFER_SIZE];
@@ -99,7 +99,8 @@ void clientLogic(int server_socket) {
 
     }
     else if (strncmp(out, "vlib", 4)==0){
-
+        read(server_socket, input, sizeof(input));
+        printf("%s\n", input);
     }
 }
 

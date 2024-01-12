@@ -36,3 +36,4 @@ clean:
 	@rm -f *.h.gch
 	@rm -f server
 	@rm -f client
+	@rm -f tempfile

@@ -83,16 +83,19 @@ void subserver_logic(int client_socket, struct node** lib, int i) {
         }
         printf("name of playlist: %s\n", playl->pname);
         // *(playlistlib+playlistcount) = playl;
-        playlistcount++;//stays 1
+        playlistcount++;//stays 1?
         printf("%d\n", playlistcount);
         print_list(playl->song);
     }
     else if (i==4){//view lib
-        // int stdoutcopy = dup(STDOUT_FILENO);
-        // int temp = open("tempfile", O_RDWR | O_CREAT | O_TRUNC, 0777);
-        // dup2(temp, STDOUT_FILENO);
-        print_lib(lib);
-        // write(client_socket, temp, sizeof(temp));
+        int stdoutcopy = dup(STDOUT_FILENO);//only does all this after client exits
+        int temp = open("tempfile", O_RDWR | O_CREAT | O_TRUNC, 0777);
+        dup2(temp, STDOUT_FILENO);
+        print_lib(lib);//why does it only print after client exits???
+        char contents[2*BUFFER_SIZE];
+        read(temp, contents, sizeof(contents));
+        printf("%s\n", contents);
+        write(client_socket, contents, sizeof(contents));
     }
     else {
         err(errno, "invalid command \n");
@@ -120,7 +123,6 @@ int main(int argc, char* argv[]) {
         printf("press 'm' to make a playlist, 'vplaylist' to view a specific playlist, 'vlib' to view library, 'a' to add a song, 'd' to delete song or playlist\n \n");
         char in[32];
         read(client_socket, in, sizeof(in));
-        printf("in %s\n", in);
 
         if (fork() == 0) {
             int currClientCount = clientCount++;
