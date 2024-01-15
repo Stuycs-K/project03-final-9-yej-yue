@@ -135,7 +135,6 @@ int main(int argc, char* argv[]) {
     printallplaylist(playlistlib);
     printf("done print all\n");
 
-    //struct node* makesong(char* song, char* singer, struct node* n){
     struct node** library = makelib();
     add_song(makesong("505", "arctic monkeys", NULL), library);
     add_song(makesong("agora hills", "doja cat", NULL), library);
@@ -147,7 +146,6 @@ int main(int argc, char* argv[]) {
     add_song(makesong("obsessed", "mariah carey", NULL), library);
     add_song(makesong("sugar", "maroon 5", NULL), library);
     add_song(makesong("this side of paradise", "coyote theory", NULL), library);
-    print_lib(library);
 
     int pcountShmid;
     int* PSCp;
@@ -180,25 +178,29 @@ int main(int argc, char* argv[]) {
         printf("press 'm' to make a playlist, 'vplaylist' to view a specific playlist, 'vlib' to view library, 'a' to add a song, 'd' to delete song or playlist\n \n");
         char in[32];
         read(client_socket, in, sizeof(in));
+        if (in[strlen(in) - 1] == '\n') {
+            in[strlen(in) - 1] = '\0';
+        }
+        
         if (fork() == 0) {
             int currClientCount = clientCount++;
             printf("waiting for client %d's command \n", currClientCount);
 
-            if (strcmp(in, "a\n") == 0) {
+            if (strcmp(in, "a") == 0) {
                 printf("asking for song info to add \n");
                 *childLSp = subserver_logic(client_socket, childLSp, 0, *childPSCp);
                 exit(0);
             }
-            else if (strcmp(in, "vplaylist\n")==0){
+            if (strcmp(in, "vplaylist")==0){
                 printf("printing playlist ");
                 *playlistlib = subserver_logic(client_socket, childLSp, 1, *childPSCp);
                 exit(0);
             }
-            else if (strcmp(in, "d\n")==0){
+            if (strcmp(in, "d")==0){
                 *childLSp = subserver_logic(client_socket, childLSp, 2, *childPSCp);
                 exit(0);
             }
-            else if (strcmp(in, "m\n")==0){
+            if (strcmp(in, "m")==0){
                 *childLSp = subserver_logic(client_socket, childLSp, 3, *childPSCp);
                 // *childLSp += (*childPSCp)*sizeof(struct lists*);
                 (*childPSCp)++;
@@ -210,8 +212,9 @@ int main(int argc, char* argv[]) {
                 // *childLSp -= ((*childPSCp)-1)*sizeof(struct lists*);
                 exit(0);
             }
-            else if (strcmp(in, "vlib\n")==0){
-                *playlistlib = subserver_logic(client_socket, childLSp, 4, *childPSCp);
+            if (strcmp(in, "vlib")==0){
+                print_lib(library);
+                //*playlistlib = subserver_logic(client_socket, childLSp, 4, *childPSCp);
                 //exit(0);
             }
         } 
