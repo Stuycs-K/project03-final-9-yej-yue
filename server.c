@@ -135,6 +135,20 @@ int main(int argc, char* argv[]) {
     printallplaylist(playlistlib);
     printf("done print all\n");
 
+    //struct node* makesong(char* song, char* singer, struct node* n){
+    struct node** library = makelib();
+    add_song(makesong("505", "arctic monkeys", NULL), library);
+    add_song(makesong("agora hills", "doja cat", NULL), library);
+    add_song(makesong("awkward", "sza", NULL), library);
+    add_song(makesong("delicate", "taylor swift", NULL), library);
+    add_song(makesong("die for you", "the weeknd", NULL), library);
+    add_song(makesong("maniac", "conan gray", NULL), library);
+    add_song(makesong("miracle aligner", "the last shadow puppets", NULL), library);
+    add_song(makesong("obsessed", "mariah carey", NULL), library);
+    add_song(makesong("sugar", "maroon 5", NULL), library);
+    add_song(makesong("this side of paradise", "coyote theory", NULL), library);
+    print_lib(library);
+
     int pcountShmid;
     int* PSCp;
     //trying two different shared mem things instead of one shared mem block
@@ -198,7 +212,7 @@ int main(int argc, char* argv[]) {
             }
             else if (strcmp(in, "vlib\n")==0){
                 *playlistlib = subserver_logic(client_socket, childLSp, 4, *childPSCp);
-                exit(0);
+                //exit(0);
             }
         } 
         else {
