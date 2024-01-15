@@ -17,6 +17,13 @@
 
 #define PORT "19230"
 #define BUFFER_SIZE 1024
+union semun { 
+   int              val;    /* Value for SETVAL */
+   struct semid_ds *buf;    /* Buffer for IPC_STAT, IPC_SET */
+   unsigned short  *array;  /* Array for GETALL, SETALL */
+   struct seminfo  *__buf;  /* Buffer for IPC_INFO */
+                            /* (Linux-specific) */
+ };
 
 int server_setup();
 int client_tcp_handshake(char*server_address);

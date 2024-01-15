@@ -5,8 +5,12 @@
 #include "playlist.h"
 #include "err.h"
 #include <sys/shm.h>
+#include <sys/types.h> 
+#include <sys/ipc.h> 
+#include <sys/sem.h>
 #define key 111111
 #define key1 111112
+#define semkey 101010
 
 // allow server to read from multiple clients (include numbered clients)
 // check audio functions with mpg123
@@ -150,6 +154,28 @@ int main(int argc, char* argv[]) {
     LSp = shmat(listsShmid, 0, 0);
     LSp = calloc(50, sizeof(struct lists*));
 
+    int v, r;
+    int semaphore = semget(semkey, 1, IPC_CREAT | IPC_EXCL | 0644);
+        if (semaphore == -1) {
+            semctl(semaphore, IPC_RMID, 0);
+            semaphore = semget(semkey, 1, IPC_CREAT | IPC_EXCL | 0644);
+            // semaphore = semget(semkey, 1, 0);
+            // v = semctl(semaphore, 0, GETVAL, 0);
+            // printf("semctl returned: %d\n", v);
+        }
+        else {
+            union semun us;
+            us.val = 1;
+            r = semctl(semaphore, 0, SETVAL, us);
+            printf("semctl returned: %d\n", r);
+        }
+        struct sembuf sb;
+        sb.sem_num = 0;
+        sb.sem_flg = SEM_UNDO;
+        sb.sem_op = -1;//down
+        // sb.sem_op = 1;
+        semop(semaphore, &sb, 1);
+
     while (1) {
         printf("waiting for client\n");
         int client_socket = server_tcp_handshake(listen_socket);
@@ -174,6 +200,7 @@ int main(int argc, char* argv[]) {
             struct lists** childLSp;
             err(childLshmid,"list shmget didn't work in while\n");
             childLSp = shmat(childLshmid, 0, 0);
+
 
             int currClientCount = clientCount++;
             printf("waiting for client %d's command \n", currClientCount);
@@ -218,7 +245,10 @@ int main(int argc, char* argv[]) {
             }
         } 
         else {
+            sb.sem_op = -1;//down
+            semop(semaphore, &sb, 1);
             wait(NULL);
+
             int childPCshmid;
             childPCshmid = shmget(key, sizeof(int), 0);
             int* childPSCp;
@@ -234,11 +264,16 @@ int main(int argc, char* argv[]) {
             printf("outside of fork playlist count %d\n", *childPSCp);
             printallplaylist(childLSp);
             printf("outside of fork playlist name %s\n", (*childLSp)->pname);//empty?????
+            
+            sb.sem_op = 1; //up
+            semop(semaphore, &sb, 1);
+
             shmdt(childPSCp);
             shmdt(childLSp);
             close(client_socket);
         }
     }
+    semctl(semaphore, IPC_RMID, 0);
     shmctl(pcountShmid, IPC_RMID, 0);
     shmctl(listsShmid, IPC_RMID, 0);
 }
