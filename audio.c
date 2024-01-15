@@ -5,11 +5,24 @@
 char currSong[1024] = "";
 
 void play(char* songName) {
-    char command[256];
-    snprintf(command, sizeof(command), "mpg123 \"./music/%s\"", songName);
-    
-    if (system(command) == -1) {
-        err(errno, "error playing the song \n");
+    pid_t pid = fork();
+
+    if (pid == -1) {
+        err(errno, "error forking process \n");
+    } 
+    else if (pid == 0) {
+        chdir("./music");
+        char filePath[256];
+        snprintf(filePath, sizeof(filePath), "%s.mp3", songName);
+        char* command[] = {"mpg123", filePath, NULL};
+        execvp("mpg123", command);
+        err(errno, "error executing command \n");
+    }
+    else {
+        int status;
+        if (waitpid(pid, &status, 0) == -1) {
+            err(errno, "error waiting for child process \n");
+        }
     }
 }
 
@@ -24,7 +37,7 @@ void skip(struct node* nextSong) {
     if (system("pkill -KILL mpg123") == -1) {
         err(errno, "error skipping the song \n");
     }
-    play(nextSong);
+    //play(nextSong);
     printf("song skipped \n");
 }
 
@@ -32,7 +45,7 @@ void rrewind(struct node* song) {
     if (system("pkill -KILL mpg123") == -1) {
         err(errno, "error rewinding the song \n");
     }
-    play(song);
+    //play(song);
     printf("song rewound \n");
 }
 
