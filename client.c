@@ -37,6 +37,9 @@ void clientLogic(int server_socket) {
     char out[32];
     printf("enter command:\n");
     fgets(out, sizeof(out), stdin);
+    if (out[strlen(out) - 1] == '\n') {
+        out[strlen(out) - 1] = '\0';
+    }
     write(server_socket, out, sizeof(out));
     if (strncmp(out, "a", 1)==0){
         printf("which playlist? ");
@@ -65,13 +68,13 @@ void clientLogic(int server_socket) {
         read(server_socket, str, strlen(str)+1);
         // printf("modified: %s \n", str);
     }
-    else if (strncmp(out, "vplaylist", 9)==0){
+    if (strncmp(out, "vplaylist", 9)==0){
         printf("enter playlist name:\n");
         fgets(playlist, sizeof(playlist), stdin);
         printf("VIEWING %s\n", playlist);
         write(server_socket, playlist, sizeof(playlist));
     }
-    else if (strncmp(out, "d", 1)==0){
+    if (strncmp(out, "d", 1)==0){
         char plist[BUFFER_SIZE];
         char songtodelete[BUFFER_SIZE];
         char singa[BUFFER_SIZE];
@@ -100,7 +103,7 @@ void clientLogic(int server_socket) {
         // str = malloc(strlen(input)+strlen(plist)+strlen(songtodelete)+4);
         write(server_socket, str, strlen(str)+1);
     }
-    else if (strncmp(out, "m", 1)==0){
+    if (strncmp(out, "m", 1)==0){
         printf("name for playlist: \n");
         fgets(playlist, sizeof(playlist), stdin);
         printf("how many songs? \n");
@@ -130,7 +133,7 @@ void clientLogic(int server_socket) {
         write(server_socket, str, strlen(str)+1);
 
     }
-    else if (strncmp(out, "vlib", 4)==0){
+    if (strncmp(out, "vlib", 4)==0){
         read(server_socket, input, sizeof(input));
         printf("%s\n", input);
     }
