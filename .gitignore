@@ -38,6 +38,7 @@
 server
 client
 runme
+tempfile
 
 # Debug files
 *.dSYM/
