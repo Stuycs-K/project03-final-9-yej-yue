@@ -69,7 +69,7 @@ void printPlaylist(char* playlistName, struct lists** playlist) {
         tempsong = tempsong->next;
     }
     printf("end of, palylist %s\n", (*playlist)->pname);
-    printf("song %s\n", (*playlist)->song);
+    printf("song %s\n", ((*playlist)->song)->name);
 }
 
 void printallplaylist(struct lists** playlist){
@@ -100,13 +100,27 @@ void deletePlaylist(char* playlistName, struct lists* playlist) {
     }
 }
 
-void deletesong(char* playlistName, struct lists* playlist, char* songname) {
-    struct lists* target = findPlaylist(playlistName, playlist);
-    if (target != NULL) {
-        
-    } 
-    else {
-        err(errno, "playlist not found \n");
+struct lists* deletesong(struct lists** lib, char*plistname, char* name, char* singa){
+    struct lists* temp = findPlaylist(plistname, *lib);
+    if (temp != NULL){
+        struct node* tempsong = temp->song;
+        struct node* prev = tempsong;
+        while(tempsong != NULL){
+            if(strcmp(tempsong->name, name)==0){
+                if(strcmp(tempsong->artist, singa)==0){
+                    if (prev == tempsong){
+                        prev = tempsong->next;
+                    }
+                    else prev->next = tempsong->next;
+                    free(tempsong);
+                }
+            }
+            else{
+                prev = tempsong;
+                tempsong=tempsong->next;
+            }
+        }
+        return temp;
     }
 }
 

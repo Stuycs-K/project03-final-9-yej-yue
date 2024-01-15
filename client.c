@@ -72,7 +72,33 @@ void clientLogic(int server_socket) {
         write(server_socket, playlist, sizeof(playlist));
     }
     else if (strncmp(out, "d", 1)==0){
-        
+        char plist[BUFFER_SIZE];
+        char songtodelete[BUFFER_SIZE];
+        char singa[BUFFER_SIZE];
+        printf("delete playlist or song?\n");
+        fgets(input, sizeof(input), stdin);
+        printf("(from) which playlist? \n");
+        fgets(plist, sizeof(plist), stdin);
+        str = malloc(strlen(input)+strlen(plist)+strlen(songtodelete)+strlen(singa)+4);
+        if (str != NULL){
+            strcat(str, input);
+            // strcat(str, ", ");
+            strcat(str, plist);
+            // strcat(str, ", ");
+            // printf("printing to server %s\n", str);
+        }
+        if (strncmp(input, "song", 4)==0){
+            printf("which song? \n");
+            fgets(songtodelete, sizeof(songtodelete), stdin);
+            printf("by who? \n");
+            fgets(singa, sizeof(singa), stdin);
+            strcat(str, songtodelete);
+            strcat(str, singa);
+            // printf("new printing to server %s\n", str);
+        }
+        // fgets(songtodelete, sizeof(songtodelete), stdin);
+        // str = malloc(strlen(input)+strlen(plist)+strlen(songtodelete)+4);
+        write(server_socket, str, strlen(str)+1);
     }
     else if (strncmp(out, "m", 1)==0){
         printf("name for playlist: \n");

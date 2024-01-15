@@ -35,6 +35,7 @@ static void sighandler(int signo) {
 struct lists* subserver_logic(int client_socket, struct lists** lib, int i, int count) {
     char input[BUFFER_SIZE];
     read(client_socket, input, sizeof(input));
+    printf("input %s\n", input);
 
     if (i == 0) {
         char* song = strtok(input, ", ");
@@ -49,11 +50,26 @@ struct lists* subserver_logic(int client_socket, struct lists** lib, int i, int 
         char* playlistname = strtok(input, "\n");
         printf("%s\n", playlistname);
         printPlaylist(playlistname, lib);
-
     }
     else if (i==2){
-        printf("delete playlist or song?\n");
-        count--;//if playlist
+        char* pOrS = strtok(input, "\n");
+        char* playlistname = strtok(NULL, "\n");
+        // printf("%s %s\n", pOrS, playlistname);
+        if(strcmp(pOrS, "playlist")==0){
+            deletePlaylist(playlistname, *lib);
+            count--;//if playlist
+            printf("playlist count from inside subserver %d\n", count);
+            printf("new:\n");
+            printallplaylist(lib);
+        }
+        else if (strcmp(pOrS, "song")==0){
+            char* song = strtok(NULL, "\n");
+            char* artist = strtok(NULL, "\n");
+            struct lists** templib = lib;
+            deletesong(templib, playlistname, song, artist);
+            printf("new:\n");
+            printPlaylist(playlistname, lib);//or do i not need templib
+        }
     }
     else if (i == 3) {
         printf("asking for playlist info \n");
@@ -110,13 +126,14 @@ int main(int argc, char* argv[]) {
     // struct node** library = makelib();
     int clientCount = 1;
     struct lists** playlistlib = calloc(50, sizeof(struct lists*));
-    // *playlistlib = createPlaylist("hi", makesong("aldf", "b", NULL), NULL);
-    // *playlistlib = insertplaylist(createPlaylist("a", makesong("a", "f", NULL), NULL), *playlistlib);
-    // *playlistlib = insertplaylist(createPlaylist("b", makesong("s", "f", NULL), NULL), *playlistlib);
-    // addSong2Playlist(makesong("fd", "dg", NULL), "b", *playlistlib);
-    // *playlistlib = insertplaylist(createPlaylist("z", makesong("s", "f", NULL), NULL), *playlistlib);
-    // printallplaylist(playlistlib);
-    // printf("done print all\n");
+    *playlistlib = createPlaylist("hi", makesong("aldf", "b", NULL), NULL);
+    *playlistlib = insertplaylist(createPlaylist("a", makesong("a", "f", NULL), NULL), *playlistlib);
+    *playlistlib = insertplaylist(createPlaylist("b", makesong("s", "f", NULL), NULL), *playlistlib);
+    addSong2Playlist(makesong("fd", "dg", NULL), "b", *playlistlib);
+    *playlistlib = deletesong(playlistlib, "b", "fd", "dg");
+    *playlistlib = insertplaylist(createPlaylist("z", makesong("s", "f", NULL), NULL), *playlistlib);
+    printallplaylist(playlistlib);
+    printf("done print all\n");
 
     int pcountShmid;
     int* PSCp;
@@ -164,7 +181,8 @@ int main(int argc, char* argv[]) {
                 exit(0);
             }
             else if (strcmp(in, "d\n")==0){
-                
+                *childLSp = subserver_logic(client_socket, childLSp, 2, *childPSCp);
+                exit(0);
             }
             else if (strcmp(in, "m\n")==0){
                 *childLSp = subserver_logic(client_socket, childLSp, 3, *childPSCp);
@@ -186,6 +204,7 @@ int main(int argc, char* argv[]) {
         else {
             wait(NULL);
             printf("outside of fork playlist count %d\n", *childPSCp);
+            printallplaylist(childLSp);
             printf("outside of fork playlist name %s\n", (*childLSp)->pname);//empty?????
             shmdt(childPSCp);
             shmdt(childLSp);
