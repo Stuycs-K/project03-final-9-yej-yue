@@ -4,7 +4,8 @@
         "connect.h": "c",
         "audio.h": "c",
         "string.h": "c",
-        "list.h": "c"
+        "list.h": "c",
+        "stdlib.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
