@@ -8,12 +8,22 @@
 #ifndef AUDIO_H
 #define AUDIO_H
 
-extern char currSong[1024];
+struct queueNode {
+    char songName[50];
+    struct queueNode* next;
+};
+
+struct queue {
+    struct queueNode* front;
+    struct queueNode* rear;
+};
 
 void play(char* songName);
-void ppause();
-void skip(struct node* nextSong);
-void rrewind(struct node* song);
-void getCurrSong(char* song);
+struct queue* createQueue();
+void enqueue(struct queue* queue, char* songName);
+void dequeue(struct queue* queue);
+void displayQueue(struct queue* queue);
+void clearQueue(struct queue* queue);
+void playQueue(struct queue* queue);
 
 #endif

@@ -2,8 +2,6 @@
 #include "list.h"
 #include "connect.h"
 
-char currSong[1024] = "";
-
 void play(char* songName) {
     pid_t pid = fork();
 
@@ -26,29 +24,58 @@ void play(char* songName) {
     }
 }
 
-void ppause() {
-    if (system("pkill -STOP mpg123") == -1) {
-        err(errno, "error pausing the song \n");
-    }
-    printf("song paused \n");
+struct queue* createQueue() {
+    struct queue* queue = (struct queue*)malloc(sizeof(struct queue));
+    queue->front = queue->rear = NULL;
+    return queue;
 }
 
-void skip(struct node* nextSong) {
-    if (system("pkill -KILL mpg123") == -1) {
-        err(errno, "error skipping the song \n");
+void enqueue(struct queue* queue, char* songName) {
+    struct queueNode* newNode = (struct queueNode*)malloc(sizeof(struct queueNode));
+    strncpy(newNode->songName, songName, sizeof(newNode->songName));
+    newNode->next = NULL;
+
+    if (queue->rear == NULL) {
+        queue->front = queue->rear = newNode;
+    } else {
+        queue->rear->next = newNode;
+        queue->rear = newNode;
     }
-    //play(nextSong);
-    printf("song skipped \n");
 }
 
-void rrewind(struct node* song) {
-    if (system("pkill -KILL mpg123") == -1) {
-        err(errno, "error rewinding the song \n");
+void dequeue(struct queue* queue) {
+    if (queue->front == NULL) {
+        printf("queue is empty\n");
+        return;
     }
-    //play(song);
-    printf("song rewound \n");
+
+    struct queueNode* temp = queue->front;
+    queue->front = temp->next;
+
+    if (queue->front == NULL) {
+        queue->rear = NULL;
+    }
+    free(temp);
 }
 
-void getCurrSong(char* song) {
-    strcpy(song, currSong);
+void displayQueue(struct queue* queue) {
+    struct queueNode* current = queue->front;
+    while (current != NULL) {
+        printf("%s \n", current->songName);
+        current = current->next;
+    }
+}
+
+void clearQueue(struct queue* queue) {
+    while (queue->front != NULL) {
+        dequeue(queue);
+    }
+}
+
+void playQueue(struct queue* queue) {
+    while (queue->front != NULL) {
+        char* songName = queue->front->songName;
+        play(songName);
+        dequeue(queue);
+    }    
 }
