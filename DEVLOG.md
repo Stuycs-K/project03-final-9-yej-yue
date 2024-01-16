@@ -30,7 +30,12 @@
 - implementing playlist things in server: 1 hr
 ### 2024-01-12 - altering playlist code and server
 - figuring out issues in server and playlist functions: 2 hr
-### 2024-01-13 to -15 - fixing playlist, server, shared memory
+### 2024-01-13 to -15 - fixing playlist, server, shared memory, semaphores
+- adding playlist and server/client function: 3 hr
+- implementing shared memeory for storage of playlists: 1 hr 30 min
+- troubleshooting shared memory and why it isn't the same after forking: 3 hr
+- trying semaphores to synchronize: 2 hr
+- updating proposal and readme: 20 min
 
 ## Jennifer Ye
 
