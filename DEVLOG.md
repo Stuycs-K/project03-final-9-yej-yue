@@ -101,3 +101,6 @@
 - new queue functions that allow user to add, view, play, and clear queue: 90 minutes
 - implementing stat to show music folder's files' data: 45 minutes
 - using signal SIGQUIT to display file data: 30 minutes
+- user instructions in main file: 15 minutes
+- README file updates with new project: 45 minutes
+- PROPOSAL file updates with new project: 45 minutes
