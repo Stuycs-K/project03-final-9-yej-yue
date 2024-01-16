@@ -6,21 +6,30 @@ Jennifer Ye, Ellen Yu
 
 # Intentions:
 
-A music streaming server like Spotify that can handle multiple users
+OLD: A music streaming server like Spotify that can handle multiple users
+FINAL: A solo music player like Spotify that allows one user
 
 # Intended usage:
 
-Our music streaming server will allow clients to access, request, and control music playback. Multiple clients can add specific songs to a queue, and add or delete songs from a playlist. They can also create and view playlists, and view library. 
+OLD: Our music streaming server will allow clients to access, request, and control music playback. Multiple clients can add specific songs to a queue, and add or delete songs from a playlist. They can also create and view playlists, and view library. 
+FINAL: Our music streaming platform allows one user through the terminal to make, delete, and add to playlists from our library of songs. That one user can also add songs to a queue or request a specific song to play out loud. 
 
 # Technical Details:
 
 ## topics covered in class
+### OLD:
 - server-client communication using sockets
 - fork/exec processes to handle multiple client requests
-- file handling to store music library information
-- signals as shortcuts (skip song, create playlist, etc.)
-- shared memory to correctly store playlists between processes
+- file handling to store music library files
+- signals as shortcuts (exit music player using SIGINT)
+- shared memory to store playlists between processes (unsuccessful)
 - semaphores to ensure synchronized shared memory
+### FINAL:
+- Allocating memory: malloc() is used throughout our project for creating our library, playlists, and our queue; we also used structs whose memory was allocated through malloc()
+- Working with files: to display file information and to play a song from a file using mpg123
+- Finding information about files (stat and such): stat obtains the metadata of our music files like file size and also retrieves its name using the file's path
+- Processes (fork, exec, etc.): create a new process to execute mpg123 (an external command)
+- Signals: SIGINT (ctrl+c) makes it easier for user to exit music program, SIGQUIT allows users to request music file information instantly whenever they'd like
 
 ## project breakdown and responsibilities
 ### Jennifer
