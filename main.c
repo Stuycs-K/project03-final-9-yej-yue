@@ -1,4 +1,6 @@
 #include <signal.h>
+#include <dirent.h>
+#include <sys/stat.h>
 #include "list.h"
 #include "lib.h"
 #include "audio.h"
@@ -6,16 +8,48 @@
 #include "playlist.h"
 #include "err.h"
 
+void displayFileInfo(const char* filePath) {
+    struct stat fileStat;
+    if (stat(filePath, &fileStat) == 0) {
+        printf("file: %s \n", filePath);
+        printf("size: %lld bytes \n \n", fileStat.st_size);
+    } 
+    else {
+        err(errno, "error getting file information \n");
+    }
+}
+
 static void sighandler(int signo) {
-    if (signo == SIGINT){ 
+    if (signo == SIGINT) { 
         // ctrl+c
         printf("\nexiting music player \n");
         exit(0);
+    }
+    if (signo == SIGQUIT) { 
+        // 'ctrl+\'
+        const char *directoryPath = "./music";
+        DIR *dir = opendir(directoryPath);
+        printf("music folder files' data");
+        if (dir) {
+            struct dirent* entry;
+            while ((entry = readdir(dir)) != NULL) {
+                if (entry->d_type == DT_REG) {
+                    char filePath[256]; 
+                    snprintf(filePath, sizeof(filePath), "%s/%s", directoryPath, entry->d_name);
+                    displayFileInfo(filePath);
+                }
+            }
+            closedir(dir);
+        } 
+        else {
+            err(errno, "error opening directory \n");
+        }
     }
 }
 
 int main() {
     signal(SIGINT, sighandler);
+    signal(SIGQUIT, sighandler);
 
     struct node** library = makelib();
     add_song(makesong("505", "arctic monkeys", NULL), library);
