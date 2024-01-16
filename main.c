@@ -51,6 +51,14 @@ int main() {
     signal(SIGINT, sighandler);
     signal(SIGQUIT, sighandler);
 
+    printf("\n");
+    printf("type \'vlib\' to view the entire library of songs at your disposure, \n");
+    printf("\'mplaylist\' to make a new playlist, \'vplaylist\' to view a specific playlist, \n");
+    printf("\'add2playlist\' to add to a specified playlist, \'deletefromplaylist\' to specify a song to delete from a specific playlist, \n");
+    printf("\'deleteplaylist\' to delete a specific playlist, \'playsong\' to specify a song to play out loud, \n");
+    printf("\'add2queue\' to add songs to play in a queue, \'vqueue\' to view all the songs currently in the queue, \n");
+    printf("\'playqueue\' to play all the songs in the queue, \'clearqueue\' to clear all the songs in the queue \n \n");    
+
     struct node** library = makelib();
     add_song(makesong("505", "arctic monkeys", NULL), library);
     add_song(makesong("agora hills", "doja cat", NULL), library);
