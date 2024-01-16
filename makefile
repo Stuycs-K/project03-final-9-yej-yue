@@ -1,4 +1,4 @@
-compile: lib.o list.o err.o playlist.o _server _client
+compile: lib.o list.o err.o playlist.o 
 runme: main.o lib.o list.o err.o audio.o playlist.o
 	@gcc -o runme lib.o list.o err.o audio.o playlist.o main.o
 main.o: main.c lib.h list.h err.h audio.h playlist.h
