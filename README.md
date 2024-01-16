@@ -54,4 +54,5 @@ Press 'm' to make a playlist, which will then ask for playlist name, base number
 To exit, press ctrl+c (SIGINT) in each terminal.
 
 ### BUGS:
-- 
+- we were unable to check if the user's song request was within our library; instead, our code just pretends like that song exists and doesn't throw an error or anything when that song is requested to be played or added to a queue (nothing plays because there is no such song in our library)
+- after SIGQUIT is used, the user needs to press enter for the prompt enter a command: to show up again 
