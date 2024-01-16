@@ -92,7 +92,7 @@
 - edited play function: 10 minutes
 - tried using signal SIGCONT: 20 minutes
 
-### 2024-01-14 to 16 -  
+### 2024-01-14 to 16 - converting server/client to main, queue, stat, signals, README + PROPOSAL
 - fixed and tested that users can use play function to play songs from music folder using mpg123: 45 minutes
 - library now stores and can print all songs: 30 minutes
 - basic stylistic issues with server/client: 30 minutes
