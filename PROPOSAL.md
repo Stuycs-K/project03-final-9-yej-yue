@@ -10,7 +10,7 @@ A music streaming server like Spotify that can handle multiple users
 
 # Intended usage:
 
-Our music streaming server will allow clients to access, request, and control music playback. Multiple clients can add specific songs to a queue, and add or delete songs from a playlist. 
+Our music streaming server will allow clients to access, request, and control music playback. Multiple clients can add specific songs to a queue, and add or delete songs from a playlist. They can also create and view playlists, and view library. 
 
 # Technical Details:
 
@@ -19,17 +19,23 @@ Our music streaming server will allow clients to access, request, and control mu
 - fork/exec processes to handle multiple client requests
 - file handling to store music library information
 - signals as shortcuts (skip song, create playlist, etc.)
+- shared memory to correctly store playlists between processes
+- semaphores to ensure synchronized shared memory
 
 ## project breakdown and responsibilities
 ### Jennifer
 - file handling
+- audio control
 - socket implementation
 - user features (requests, shuffle, playlists)
+- signals
 ### Ellen
 - server/client
 - fork/exec
 - signals
 - user features (add, delete, playback)
+- shared memory
+- semaphores
 
 ## algorithms
 - manage multiple client requests
@@ -42,7 +48,8 @@ Our music streaming server will allow clients to access, request, and control mu
 - linked list of songs (playlists)
 - individual user sessions (client interactions with server)
 - buffer data (audio during streaming)
-    
+- shared memory (playlists, count)
+
 # Intended pacing:
 
 Jan 3 - proposal 

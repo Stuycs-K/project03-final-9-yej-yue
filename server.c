@@ -157,11 +157,9 @@ int main(int argc, char* argv[]) {
     int v, r;
     int semaphore = semget(semkey, 1, IPC_CREAT | IPC_EXCL | 0644);
         if (semaphore == -1) {
-            semctl(semaphore, IPC_RMID, 0);
-            semaphore = semget(semkey, 1, IPC_CREAT | IPC_EXCL | 0644);
-            // semaphore = semget(semkey, 1, 0);
-            // v = semctl(semaphore, 0, GETVAL, 0);
-            // printf("semctl returned: %d\n", v);
+            semaphore = semget(semkey, 1, 0);
+            v = semctl(semaphore, 0, GETVAL, 0);
+            printf("semctl returned: %d\n", v);
         }
         else {
             union semun us;
@@ -169,12 +167,16 @@ int main(int argc, char* argv[]) {
             r = semctl(semaphore, 0, SETVAL, us);
             printf("semctl returned: %d\n", r);
         }
+
         struct sembuf sb;
+        int a;
         sb.sem_num = 0;
         sb.sem_flg = SEM_UNDO;
-        sb.sem_op = -1;//down
-        // sb.sem_op = 1;
-        semop(semaphore, &sb, 1);
+        // sb.sem_op = -1;//down
+        sb.sem_op = 1;
+        a = semop(semaphore, &sb, 1);
+        printf("semop 1 %d\n", a);
+        err(a, "semop 1\n");
 
     while (1) {
         printf("waiting for client\n");
@@ -189,17 +191,17 @@ int main(int argc, char* argv[]) {
         }
         
         if (fork() == 0) {
-            int childPCshmid;
-            childPCshmid = shmget(key, sizeof(int), 0);
+            // int childPCshmid;
+            // childPCshmid = shmget(key, sizeof(int), 0);
             int* childPSCp;
-            err(childPCshmid, "shmget didn't work in while\n");
-            childPSCp = shmat(childPCshmid, 0, 0);
+            err(pcountShmid, "shmget didn't work in while\n");
+            childPSCp = shmat(pcountShmid, 0, 0);
 
-            int childLshmid;
-            childLshmid = shmget(key1, 0, 0);
+            // int childLshmid;
+            // childLshmid = shmget(key1, 0, 0);
             struct lists** childLSp;
-            err(childLshmid,"list shmget didn't work in while\n");
-            childLSp = shmat(childLshmid, 0, 0);
+            err(listsShmid,"list shmget didn't work in while\n");
+            childLSp = shmat(listsShmid, 0, 0);
 
 
             int currClientCount = clientCount++;
@@ -231,6 +233,7 @@ int main(int argc, char* argv[]) {
                 printf("playlist count %d\n", *childPSCp);
                 printf("playlist name %s\n", (*childLSp)->pname);
                 printf("song? %s\n", ((*childLSp)->song)->name);
+                printallplaylist(childLSp);
                 shmdt(childPSCp);
                 shmdt(childLSp);
                 exit(0);
@@ -246,27 +249,30 @@ int main(int argc, char* argv[]) {
         } 
         else {
             sb.sem_op = -1;//down
-            semop(semaphore, &sb, 1);
+            a = semop(semaphore, &sb, 1);
+            printf("semop 2 %d\n", a);
             wait(NULL);
+            sleep(3);
 
-            int childPCshmid;
-            childPCshmid = shmget(key, sizeof(int), 0);
+            // int childPCshmid;
+            // childPCshmid = shmget(key, sizeof(int), 0);
             int* childPSCp;
-            err(childPCshmid, "shmget didn't work in while\n");
-            childPSCp = shmat(childPCshmid, 0, 0);
+            err(pcountShmid, "shmget didn't work in while\n");
+            childPSCp = shmat(pcountShmid, 0, 0);
 
-            int childLshmid;
-            childLshmid = shmget(key1, 0, 0);
+            // int childLshmid;
+            // childLshmid = shmget(key1, 0, 0);
             struct lists** childLSp;
-            err(childLshmid, "list shmget didn't work in while\n");
-            childLSp = shmat(childLshmid, 0, 0);
+            err(listsShmid, "list shmget didn't work in while\n");
+            childLSp = shmat(listsShmid, 0, 0);
 
-            printf("outside of fork playlist count %d\n", *childPSCp);
+            printf("outside of fork playlist count %d\n",*childPSCp);
             printallplaylist(childLSp);
             printf("outside of fork playlist name %s\n", (*childLSp)->pname);//empty?????
-            
+
             sb.sem_op = 1; //up
-            semop(semaphore, &sb, 1);
+            a= semop(semaphore, &sb, 1);
+            printf("semop 3 %d\n", a);
 
             shmdt(childPSCp);
             shmdt(childLSp);
