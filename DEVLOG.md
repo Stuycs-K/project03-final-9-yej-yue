@@ -86,3 +86,10 @@
 - edited makefile to be neater: 5 minutes
 - SIGCONT / ctrl+q implementation in server, client: 45 minutes
 - getCurrSong and sendSong functions as part of server/client communication: 30 minutes
+
+### 2024-01-12 - 
+- 
+
+### 2024-01-14 - 
+- fixed and tested that users can use play functions to play songs from music folder: 45 minutes
+- 

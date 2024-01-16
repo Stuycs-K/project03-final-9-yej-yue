@@ -27,8 +27,8 @@ static void sighandler(int signo) {
     }
     if (signo == SIGQUIT) { 
         // 'ctrl+\'
-        const char *directoryPath = "./music";
-        DIR *dir = opendir(directoryPath);
+        const char* directoryPath = "./music";
+        DIR* dir = opendir(directoryPath);
         printf("music folder files' data");
         if (dir) {
             struct dirent* entry;
@@ -65,9 +65,7 @@ int main() {
 
     struct lists* playlist = NULL;
     struct queue* songQueue = createQueue();
-    printf("enter 'vlib' to view library, 'mplaylist' to make a playlist, 'vplaylist' to view a playlist, 'add2playlist' to add a song to a playlist, ");
-    printf("'deletefromplaylist' to delete a song from playlist, 'deleteplaylist' to delete a playlist, 'playsong' to play a song',"); 
-    printf("'add2queue' to add a song to the queue, 'vqueue' to view the queue, 'playqueue' to play the queue, and 'clearqueue' to clear the queue\n");
+
     while (1) {
         printf("enter a command: ");
 
@@ -80,7 +78,7 @@ int main() {
         if (strcmp(in, "vlib") == 0) {
             print_lib(library);
         }
-        else if (strcmp(in, "mplaylist") == 0) {
+        if (strcmp(in, "mplaylist") == 0) {
             char playlistName[50];
             int numSongs;
 
@@ -98,7 +96,7 @@ int main() {
 
             for (int i = 0; i < numSongs; i++) {
                 char songName[50];
-                char artistName[50];
+                char artist[50];
 
                 printf("enter song name: ");
                 fgets(songName, sizeof(songName), stdin);
@@ -107,25 +105,15 @@ int main() {
                 }
 
                 printf("enter artist name: ");
-                fgets(artistName, sizeof(artistName), stdin);
-                if (artistName[strlen(artistName) - 1] == '\n') {
-                    artistName[strlen(artistName) - 1] = '\0';
+                fgets(artist, sizeof(artist), stdin);
+                if (artist[strlen(artist) - 1] == '\n') {
+                    artist[strlen(artist) - 1] = '\0';
                 }
-
-                struct node* toadd = makesong(songName, artistName, NULL);
-                // struct node* a = search_song(artistName, songName, library);
-                // printf("%s\n", a->artist);
-                // if (a != NULL){
-                //     playlist-> song = insert_in_order(toadd, playlist-> song);
-                // }
-                // else{
-                //     printf("invalid song\n");
-                // }
-                playlist-> song = insert_in_order(toadd, playlist-> song);
+                playlist-> song = insert_in_order(makesong(songName, artist, NULL), playlist-> song);
             }
             printf("playlist created successfully! \n");
         }
-        else if (strcmp(in, "vplaylist") == 0) {
+        if (strcmp(in, "vplaylist") == 0) {
             char playlistName[100];
 
             printf("existing playlist(s): \n");
@@ -146,10 +134,10 @@ int main() {
                 printf("playlist not found \n");
             }
         }
-        else if (strcmp(in, "add2playlist") == 0) {
+        if (strcmp(in, "add2playlist") == 0) {
             char playlistName[100];
             char songName[50];
-            char artistName[50];
+            char artist[50];
 
             printf("existing playlist(s): \n");
             printAllPlaylists(playlist);
@@ -167,31 +155,24 @@ int main() {
             }
 
             printf("enter artist name: ");
-            fgets(artistName, sizeof(artistName), stdin);
-            if (artistName[strlen(artistName) - 1] == '\n') {
-                artistName[strlen(artistName) - 1] = '\0';
+            fgets(artist, sizeof(artist), stdin);
+            if (artist[strlen(artist) - 1] == '\n') {
+                artist[strlen(artist) - 1] = '\0';
             }
 
             struct lists* target = findPlaylist(playlistName, playlist);
             if (target != NULL) {
-                    struct node* toadd = makesong(songName, artistName, NULL);
-                    // if (search_song(toadd->artist, toadd->name, library)!=NULL){
-                    //     target-> song = insert_in_order(toadd, target-> song);
-                    // }
-                    // else{
-                    //     printf("invalid song\n");
-                    // }
-                    target-> song = insert_in_order(toadd, target-> song);
+                target-> song = insert_in_order(makesong(songName, artist, NULL), target-> song);
                 printf("song added to playlist %s successfully! \n", playlistName);
             } 
             else {
                 printf("playlist not found \n");
             }        
         }
-        else if (strcmp(in, "deletefromplaylist") == 0) {
+        if (strcmp(in, "deletefromplaylist") == 0) {
             char playlistName[100];
             char songName[50];
-            char artistName[50];
+            char artist[50];
 
             printf("existing playlist(s): \n");
             printAllPlaylists(playlist);
@@ -209,24 +190,24 @@ int main() {
             }
 
             printf("enter artist name: ");
-            fgets(artistName, sizeof(artistName), stdin);
-            if (artistName[strlen(artistName) - 1] == '\n') {
-                artistName[strlen(artistName) - 1] = '\0';
+            fgets(artist, sizeof(artist), stdin);
+            if (artist[strlen(artist) - 1] == '\n') {
+                artist[strlen(artist) - 1] = '\0';
             }
 
             struct lists* target = findPlaylist(playlistName, playlist);
             if (target != NULL) {
-                target = deletesong(&playlist, playlistName, songName, artistName);
+                target = deletesong(&playlist, playlistName, songName, artist);
                 printf("song deleted from playlist %s successfully! \n", playlistName);
             } 
             else {
                 printf("playlist not found \n");
             }
         }
-        else if (strcmp(in, "deleteplaylist") == 0) {
+        if (strcmp(in, "deleteplaylist") == 0) {
             deletePlaylist(&playlist);
         }
-        else if (strcmp(in, "playsong") == 0) {
+        if (strcmp(in, "playsong") == 0) {
             char song[BUFFER_SIZE];
             printf("enter the song title: ");
             fgets(song, sizeof(song), stdin);
@@ -235,7 +216,7 @@ int main() {
             }            
             play(song);
         }
-        else if (strcmp(in, "add2queue") == 0) {
+        if (strcmp(in, "add2queue") == 0) {
             char songName[50];
             printf("enter song to add to the queue: ");
             fgets(songName, sizeof(songName), stdin);
@@ -245,18 +226,15 @@ int main() {
             enqueue(songQueue, songName);
             printf("song added to the queue successfully! \n");
         }
-        else if (strcmp(in, "vqueue") == 0) {
+        if (strcmp(in, "vqueue") == 0) {
             displayQueue(songQueue);
         }
-        else if (strcmp(in, "playqueue") == 0) {
+        if (strcmp(in, "playqueue") == 0) {
             playQueue(songQueue);
         }
-        else if (strcmp(in, "clearqueue") == 0) {
+        if (strcmp(in, "clearqueue") == 0) {
             clearQueue(songQueue);
             printf("queue cleared successfully \n");
-        }
-        else {
-            printf("invalid command\n");
         }
     }
     return 0;
