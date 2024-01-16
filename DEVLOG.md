@@ -87,9 +87,17 @@
 - SIGCONT / ctrl+q implementation in server, client: 45 minutes
 - getCurrSong and sendSong functions as part of server/client communication: 30 minutes
 
-### 2024-01-12 - 
-- 
+### 2024-01-12 - main file testing to play a song
+- created new main file to test play function: 30 minutes
+- edited play function: 10 minutes
+- tried using signal SIGCONT: 20 minutes
 
-### 2024-01-14 - 
-- fixed and tested that users can use play functions to play songs from music folder: 45 minutes
-- 
+### 2024-01-14 to 16 -  
+- fixed and tested that users can use play function to play songs from music folder using mpg123: 45 minutes
+- library now stores and can print all songs: 30 minutes
+- basic stylistic issues with server/client: 30 minutes
+- switching from server/client to main file because of shared memory issues/complications: 120 minutes
+- editing playlist functions to work with new main file: 40 minutes
+- new queue functions that allow user to add, view, play, and clear queue: 90 minutes
+- implementing stat to show music folder's files' data: 45 minutes
+- using signal SIGQUIT to display file data: 30 minutes
