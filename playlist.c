@@ -46,77 +46,141 @@ struct lists* findPlaylist(char* playlistName, struct lists* playlist) {
     return NULL;
 }
 
-// void addSong2Playlist(struct lists** playlist) {
-//     char playlistName[100];
-//     char songName[50];
-//     char artist[50];
 
-//     printf("existing %d playlist(s): \n", playlistCount);
-//     printAllPlaylists(playlist);
+void addSong2Playlistsc(struct node* song, char* playlistName, struct lists* playlist) {
+    playlist = findPlaylist(playlistName, playlist);
+    if (playlist != NULL) {
+        playlist->song = insert_in_order(makesong(song-> name, song-> artist, NULL), playlist->song);
+    } 
+    else {
+        err(errno, "playlist not found \n");
+    }
+}
 
-//     printf("enter the playlist name: ");
-//     fgets(playlistName, sizeof(playlistName), stdin);
-//     if (playlistName[strlen(playlistName) - 1] == '\n') {
-//         playlistName[strlen(playlistName) - 1] = '\0';
-//     } 
+void deletePlaylistsc(char* playlistName, struct lists* playlist) {
+    struct lists* target = findPlaylist(playlistName, playlist);
+    if (target != NULL) {
+        if (playlist == target) {
+            playlist = target-> next;
+        } 
+        else {
+            struct lists* prev = playlist;
+            while (prev-> next != target) {
+                prev = prev-> next;
+            }
+            prev-> next = target-> next;
+        }
+        if (target->song != NULL){
+            target-> song = free_list(target-> song);
+        }
+        free(target);
+        if (target != NULL) {
+            target = NULL;
+        }
+        printf("playlist %s deleted successfully! \n", playlistName);
+    } 
+    else {
+        printf("playlist not found.\n");
+    }
+}
 
-//     printf("enter song name: ");
-//     fgets(songName, sizeof(songName), stdin);
-//     if (songName[strlen(songName) - 1] == '\n') {
-//         songName[strlen(songName) - 1] = '\0';
-//     }
+struct lists* deletesong(struct lists** lib, char*plistname, char* name, char* singa){
+    struct lists* temp = findPlaylist(plistname, *lib);
+    if (temp != NULL){
+        struct node* tempsong = temp->song;
+        struct node* prev = tempsong;
+        while(tempsong != NULL){
+            if(strcmp(tempsong->name, name)==0){
+                if(strcmp(tempsong->artist, singa)==0){
+                    if (prev == tempsong){
+                        prev = tempsong->next;
+                    }
+                    else prev->next = tempsong->next;
+                    free(tempsong);
+                    tempsong = NULL;
+                }
+            }
+            else{
+                prev = tempsong;
+                tempsong=tempsong->next;
+            }
+        }
+        return temp;
+    }
+    return NULL;
+}
 
-//     printf("enter artist name: ");
-//     fgets(artist, sizeof(artist), stdin);
-//     if (artist[strlen(artist) - 1] == '\n') {
-//         artist[strlen(artist) - 1] = '\0';
-//     }
+void addSong2Playlist(struct lists** playlist) {
+    char playlistName[100];
+    char songName[50];
+    char artist[50];
 
-//     struct lists* target = findPlaylist(playlistName, *playlist);
-//     if (target != NULL) {
-//         target-> song = insert_in_order(makesong(songName, artist, NULL), target-> song);
-//         printf("song added to playlist %s successfully! \n", playlistName);
-//     } 
-//     else {
-//         printf("playlist not found \n");
-//     }
-// }
+    printf("existing playlist(s): \n");
+    printAllPlaylists(*playlist);
 
-// void deleteFromPlaylist(struct lists** playlist) {
-//     char playlistName[100];
-//     char songName[50];
-//     char artist[50];
+    printf("enter the playlist name: ");
+    fgets(playlistName, sizeof(playlistName), stdin);
+    if (playlistName[strlen(playlistName) - 1] == '\n') {
+        playlistName[strlen(playlistName) - 1] = '\0';
+    } 
 
-//     printf("existing %d playlist(s): \n", playlistCount);
-//     printAllPlaylists(playlist);
+    printf("enter song name: ");
+    fgets(songName, sizeof(songName), stdin);
+    if (songName[strlen(songName) - 1] == '\n') {
+        songName[strlen(songName) - 1] = '\0';
+    }
 
-//     printf("enter the playlist name: ");
-//     fgets(playlistName, sizeof(playlistName), stdin);
-//     if (playlistName[strlen(playlistName) - 1] == '\n') {
-//         playlistName[strlen(playlistName) - 1] = '\0';
-//     } 
+    printf("enter artist name: ");
+    fgets(artist, sizeof(artist), stdin);
+    if (artist[strlen(artist) - 1] == '\n') {
+        artist[strlen(artist) - 1] = '\0';
+    }
 
-//     printf("enter song name: ");
-//     fgets(songName, sizeof(songName), stdin);
-//     if (songName[strlen(songName) - 1] == '\n') {
-//         songName[strlen(songName) - 1] = '\0';
-//     }
+    struct lists* target = findPlaylist(playlistName, *playlist);
+    if (target != NULL) {
+        target-> song = insert_in_order(makesong(songName, artist, NULL), target-> song);
+        printf("song added to playlist %s successfully! \n", playlistName);
+    } 
+    else {
+        printf("playlist not found \n");
+    }
+}
 
-//     printf("enter artist name: ");
-//     fgets(artist, sizeof(artist), stdin);
-//     if (artist[strlen(artist) - 1] == '\n') {
-//         artist[strlen(artist) - 1] = '\0';
-//     }
+void deleteFromPlaylist(struct lists** playlist) {
+    char playlistName[100];
+    char songName[50];
+    char artist[50];
 
-//     struct lists* target = findPlaylist(playlistName, *playlist);
-//     if (target != NULL) {
-//         target = deletesong(playlists, playlistName, songName, artist);
-//         printf("song deleted from playlist %s successfully! \n", playlistName);
-//     } 
-//     else {
-//         printf("playlist not found \n");
-//     }
-// }
+    printf("existing playlist(s): \n");
+    printAllPlaylists(*playlist);
+
+    printf("enter the playlist name: ");
+    fgets(playlistName, sizeof(playlistName), stdin);
+    if (playlistName[strlen(playlistName) - 1] == '\n') {
+        playlistName[strlen(playlistName) - 1] = '\0';
+    } 
+
+    printf("enter song name: ");
+    fgets(songName, sizeof(songName), stdin);
+    if (songName[strlen(songName) - 1] == '\n') {
+        songName[strlen(songName) - 1] = '\0';
+    }
+
+    printf("enter artist name: ");
+    fgets(artist, sizeof(artist), stdin);
+    if (artist[strlen(artist) - 1] == '\n') {
+        artist[strlen(artist) - 1] = '\0';
+    }
+
+    struct lists* target = findPlaylist(playlistName, *playlist);
+    if (target != NULL) {
+        target = deletesong(playlist, playlistName, songName, artist);
+        printf("song deleted from playlist %s successfully! \n", playlistName);
+    } 
+    else {
+        printf("playlist not found \n");
+    }
+}
 
 void printPlaylist(char* playlistName, struct lists** playlist) {
     struct lists* temp = findPlaylist(playlistName, *playlist);
@@ -158,7 +222,7 @@ void printAllPlaylists(struct lists* playlists) {
 
 void deletePlaylist(struct lists** playlist) {
     char playlistName[100];
-    printf("Enter the playlist name: ");
+    printf("enter the playlist name: ");
     fgets(playlistName, sizeof(playlistName), stdin);
     if (playlistName[strlen(playlistName) - 1] == '\n') {
         playlistName[strlen(playlistName) - 1] = '\0';
@@ -186,29 +250,29 @@ void deletePlaylist(struct lists** playlist) {
     }
 }
 
-struct lists* deletesong(struct lists** lib, char*plistname, char* name, char* singa){
-    struct lists* temp = findPlaylist(plistname, *lib);
-    if (temp != NULL){
-        struct node* tempsong = temp->song;
-        struct node* prev = tempsong;
-        while(tempsong != NULL){
-            if(strcmp(tempsong->name, name)==0){
-                if(strcmp(tempsong->artist, singa)==0){
-                    if (prev == tempsong){
-                        prev = tempsong->next;
-                    }
-                    else prev->next = tempsong->next;
-                    free(tempsong);
-                }
-            }
-            else{
-                prev = tempsong;
-                tempsong=tempsong->next;
-            }
-        }
-        return temp;
-    }
-}
+// struct lists* deletesong(struct lists** lib, char*plistname, char* name, char* singa){
+//     struct lists* temp = findPlaylist(plistname, *lib);
+//     if (temp != NULL){
+//         struct node* tempsong = temp->song;
+//         struct node* prev = tempsong;
+//         while(tempsong != NULL){
+//             if(strcmp(tempsong->name, name)==0){
+//                 if(strcmp(tempsong->artist, singa)==0){
+//                     if (prev == tempsong){
+//                         prev = tempsong->next;
+//                     }
+//                     else prev->next = tempsong->next;
+//                     free(tempsong);
+//                 }
+//             }
+//             else{
+//                 prev = tempsong;
+//                 tempsong=tempsong->next;
+//             }
+//         }
+//         return temp;
+//     }
+// }
 
 void alphabetizePlaylists(char* playlistName, struct lists* playlist, struct node** library) {
     // struct lists* target = findPlaylist(playlistName, playlist);

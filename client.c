@@ -6,28 +6,13 @@
 #include "err.h"
 
 static void sighandler(int signo) {
-    if (signo == SIGINT){//ctrl c
-        printf("\n %d exiting music player\n", getpid());
+    if (signo == SIGINT){
+        // ctrl c
+        printf("\n %d exiting music player \n", getpid());
         exit(0);
     }
-    // if (signo == SIGTSTP){//ctrl z
-    //     pause();
-    // }
-    // if (signo == SIGQUIT){//ctrl '\'
-    //     skip(nextSong);
-    // }
-    if (signo == SIGCONT){//ctrl q
-        char song[BUFFER_SIZE];
-        printf("enter the song title: ");
-        fgets(song, sizeof(song), stdin);
-        strtok(song, "\n");
-        // play(song);    
-        // sendSong(server_socket, song);
-    }
-    // if (signo == SIGSTOP){//ctrl s
-    //     rrewind(currSong);
-    // }
 }
+
 void clientLogic(int server_socket) {
     char input[2*BUFFER_SIZE];
     char song[BUFFER_SIZE];
@@ -133,20 +118,45 @@ void clientLogic(int server_socket) {
         write(server_socket, str, strlen(str)+1);
 
     }
-    if (strncmp(out, "vlib", 4)==0){
+    if (strcmp(out, "vlib")==0){
         read(server_socket, input, sizeof(input));
-        printf("%s\n", input);
+        printf("%s \n", input);
+    }
+    if (strcmp(out, "play") == 0) {
+        char song[BUFFER_SIZE];
+        printf("enter the song you'd like to play right now: ");
+        fgets(song, sizeof(song), stdin);
+        if (song[strlen(song) - 1] == '\n') {
+            song[strlen(song) - 1] = '\0';
+        }       
+        write(server_socket, song, sizeof(song));
+    }
+    if (strcmp(out, "q") == 0) {
+        char song[BUFFER_SIZE];
+        printf("enter the song title to add to the queue: ");
+        fgets(song, sizeof(song), stdin);
+        if (song[strlen(song) - 1] == '\n') {
+            song[strlen(song) - 1] = '\0';
+        }       
+        write(server_socket, song, sizeof(song));
+        printf("song added to the queue successfully! \n");
+    }
+    if (strcmp(out, "v") == 0) {
+        write(server_socket, "v", sizeof("v"));
+    }
+    if (strcmp(out, "p") == 0) {
+        write(server_socket, "p", sizeof("p"));
+    }
+    if (strcmp(out, "c") == 0) {
+        write(server_socket, "c", sizeof("c"));
     }
 }
 
 int main(int argc, char* argv[]) {
     signal(SIGINT, sighandler);
     signal(SIGQUIT, sighandler);
-    signal(SIGTSTP, sighandler);
-    signal(SIGCONT, sighandler);
-    signal(SIGSTOP, sighandler);
     
-    int clientCount = 1;
+    printf("client %d connected \n", getpid());
 
     while (1) {
         char* IP = "127.0.0.1";
@@ -154,8 +164,7 @@ int main(int argc, char* argv[]) {
             IP = argv[1];
         }
         int server_socket = client_tcp_handshake(IP);
-        printf("client [%d] %d connected \n", clientCount, getpid());
         clientLogic(server_socket);
     }
-    int currClientCount = clientCount++;
+    return 0;
 }

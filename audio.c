@@ -60,9 +60,11 @@ void dequeue(struct queue* queue) {
 
 void displayQueue(struct queue* queue) {
     struct queueNode* current = queue->front;
+    int songCount = 1;
     while (current != NULL) {
-        printf("%s \n", current->songName);
+        printf("[%d] %s \n", songCount, current->songName);
         current = current->next;
+        songCount++;
     }
 }
 
@@ -70,6 +72,7 @@ void clearQueue(struct queue* queue) {
     while (queue->front != NULL) {
         dequeue(queue);
     }
+    printf("there is nothing in queue \n");
 }
 
 void playQueue(struct queue* queue) {

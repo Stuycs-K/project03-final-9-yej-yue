@@ -12,7 +12,7 @@ void displayFileInfo(const char* filePath) {
     struct stat fileStat;
     if (stat(filePath, &fileStat) == 0) {
         printf("file: %s \n", filePath);
-        printf("size: %lld bytes \n \n", fileStat.st_size);
+        printf("size: %ld bytes \n \n", fileStat.st_size);
     } 
     else {
         err(errno, "error getting file information \n");
@@ -34,7 +34,7 @@ static void sighandler(int signo) {
             struct dirent* entry;
             while ((entry = readdir(dir)) != NULL) {
                 if (entry->d_type == DT_REG) {
-                    char filePath[256]; 
+                    char filePath[1024]; 
                     snprintf(filePath, sizeof(filePath), "%s/%s", directoryPath, entry->d_name);
                     displayFileInfo(filePath);
                 }
